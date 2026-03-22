@@ -1,0 +1,42 @@
+[
+  {
+    "palabras": ["La", "pequeña", "ardilla", "veloz", "sube", "por", "el", "árbol", "alto"],
+    "respuestas": { "articulo": [0, 6], "sustantivo": [2, 7], "adjetivo": [1, 3, 8] }
+  },
+  {
+    "palabras": ["Mi", "primo", "favorito", "dibuja", "unos", "dragones", "fantásticos"],
+    "respuestas": { "articulo": [4], "sustantivo": [1, 5], "adjetivo": [0, 2, 6] }
+  },
+  {
+    "palabras": ["Estos", "dulces", "ricos", "son", "de", "nuestra", "tienda", "preferida"],
+    "respuestas": { "articulo": [], "sustantivo": [1, 6], "adjetivo": [0, 2, 5, 7] }
+  },
+  {
+    "palabras": ["Las", "mariposas", "coloridas", "vuelan", "sobre", "su", "campo", "florido"],
+    "respuestas": { "articulo": [0], "sustantivo": [1, 6], "adjetivo": [2, 5, 7] }
+  },
+  {
+    "palabras": ["Un", "robot", "plateado", "limpia", "esta", "cocina", "moderna"],
+    "respuestas": { "articulo": [0], "sustantivo": [1, 5], "adjetivo": [2, 4, 6] }
+  },
+  {
+    "palabras": ["Nuestros", "abuelos", "cariñosos", "cuentan", "unas", "historias", "increíbles"],
+    "respuestas": { "articulo": [4], "sustantivo": [1, 5], "adjetivo": [0, 2, 6] }
+  },
+  {
+    "palabras": ["El", "lago", "profundo", "refleja", "las", "montañas", "nevadas"],
+    "respuestas": { "articulo": [0, 4], "sustantivo": [1, 5], "adjetivo": [2, 6] }
+  },
+  {
+    "palabras": ["Su", "gatita", "juguetona", "persigue", "una", "pelota", "roja"],
+    "respuestas": { "articulo": [4], "sustantivo": [1, 5], "adjetivo": [0, 2, 6] }
+  },
+  {
+    "palabras": ["Esos", "piratas", "valientes", "buscan", "un", "tesoro", "escondido"],
+    "respuestas": { "articulo": [4], "sustantivo": [1, 5], "adjetivo": [0, 2, 6] }
+  },
+  {
+    "palabras": ["Mi", "ciudad", "natal", "tiene", "unas", "calles", "estrechas", "y", "bonitas"],
+    "respuestas": { "articulo": [4], "sustantivo": [1, 5], "adjetivo": [0, 2, 6, 8] }
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "palabras": ["Mi", "gato", "pequeño", "duerme", "en", "la", "cama", "suave"],
+    "respuestas": { "articulo": [5], "sustantivo": [1, 6], "adjetivo": [0, 2, 7] }
+  },
+  {
+    "palabras": ["Nuestro", "perro", "fiel", "cuida", "la", "casa", "grande"],
+    "respuestas": { "articulo": [4], "sustantivo": [1, 5], "adjetivo": [0, 2, 6] }
+  },
+  {
+    "palabras": ["Estos", "niños", "alegres", "juegan", "en", "el", "parque", "bonito"],
+    "respuestas": { "articulo": [5], "sustantivo": [1, 6], "adjetivo": [0, 2, 7] }
+  },
+  {
+    "palabras": ["Su", "mamá", "cariñosa", "prepara", "una", "comida", "rica"],
+    "respuestas": { "articulo": [4], "sustantivo": [1, 5], "adjetivo": [0, 2, 6] }
+  },
+  {
+    "palabras": ["Estas", "flores", "rojas", "adornan", "nuestra", "mesa", "redonda"],
+    "respuestas": { "articulo": [], "sustantivo": [1, 5], "adjetivo": [0, 2, 4, 6] }
+  },
+  {
+    "palabras": ["Mi", "hermana", "mayor", "lee", "un", "libro", "interesante"],
+    "respuestas": { "articulo": [4], "sustantivo": [1, 5], "adjetivo": [0, 2, 6] }
+  },
+  {
+    "palabras": ["Nuestros", "amigos", "divertidos", "vienen", "a", "su", "fiesta", "especial"],
+    "respuestas": { "articulo": [], "sustantivo": [1, 6], "adjetivo": [0, 2, 5, 7] }
+  },
+  {
+    "palabras": ["Este", "río", "largo", "cruza", "mi", "pueblo", "tranquilo"],
+    "respuestas": { "articulo": [], "sustantivo": [1, 5], "adjetivo": [0, 2, 4, 6] }
+  },
+  {
+    "palabras": ["Sus", "ojos", "brillantes", "miran", "el", "cielo", "azul"],
+    "respuestas": { "articulo": [4], "sustantivo": [1, 5], "adjetivo": [0, 2, 6] }
+  },
+  {
+    "palabras": ["Nuestra", "maestra", "amable", "tiene", "un", "vestido", "nuevo"],
+    "respuestas": { "articulo": [4], "sustantivo": [1, 5], "adjetivo": [0, 2, 6] }
+  }
+]

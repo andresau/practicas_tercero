@@ -1,0 +1,42 @@
+[
+  {
+    "palabras": ["Mi", "abuela", "querida", "cocina", "unas", "galletas", "deliciosas"],
+    "respuestas": { "articulo": [4], "sustantivo": [1, 5], "adjetivo": [0, 2, 6] }
+  },
+  {
+    "palabras": ["El", "viento", "fuerte", "mueve", "estos", "árboles", "altos"],
+    "respuestas": { "articulo": [0], "sustantivo": [1, 5], "adjetivo": [2, 4, 6] }
+  },
+  {
+    "palabras": ["Nuestra", "vecina", "simpática", "tiene", "un", "jardín", "hermoso"],
+    "respuestas": { "articulo": [4], "sustantivo": [1, 5], "adjetivo": [0, 2, 6] }
+  },
+  {
+    "palabras": ["Los", "ratones", "grises", "comen", "su", "queso", "favorito"],
+    "respuestas": { "articulo": [0], "sustantivo": [1, 5], "adjetivo": [2, 4, 6] }
+  },
+  {
+    "palabras": ["Esta", "montaña", "nevada", "se", "ve", "desde", "mi", "ventana", "grande"],
+    "respuestas": { "articulo": [], "sustantivo": [1, 7], "adjetivo": [0, 2, 6, 8] }
+  },
+  {
+    "palabras": ["Sus", "hijos", "traviesos", "rompieron", "la", "ventana", "nueva"],
+    "respuestas": { "articulo": [4], "sustantivo": [1, 5], "adjetivo": [0, 2, 6] }
+  },
+  {
+    "palabras": ["Un", "payaso", "gracioso", "usa", "estos", "zapatos", "enormes"],
+    "respuestas": { "articulo": [0], "sustantivo": [1, 5], "adjetivo": [2, 4, 6] }
+  },
+  {
+    "palabras": ["Nuestro", "maestro", "paciente", "explica", "las", "lecciones", "difíciles"],
+    "respuestas": { "articulo": [4], "sustantivo": [1, 5], "adjetivo": [0, 2, 6] }
+  },
+  {
+    "palabras": ["Mi", "tortuga", "lenta", "come", "una", "lechuga", "fresca"],
+    "respuestas": { "articulo": [4], "sustantivo": [1, 5], "adjetivo": [0, 2, 6] }
+  },
+  {
+    "palabras": ["Esas", "nubes", "oscuras", "cubren", "el", "cielo", "azul"],
+    "respuestas": { "articulo": [4], "sustantivo": [1, 5], "adjetivo": [0, 2, 6] }
+  }
+]
