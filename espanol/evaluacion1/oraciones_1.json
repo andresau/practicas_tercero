@@ -1,0 +1,42 @@
+[
+  {
+    "palabras": ["El", "gato", "negro", "duerme", "tranquilo"],
+    "respuestas": { "articulo": [0], "sustantivo": [1], "adjetivo": [2, 4] }
+  },
+  {
+    "palabras": ["La", "niña", "bonita", "corre", "rápido"],
+    "respuestas": { "articulo": [0], "sustantivo": [1], "adjetivo": [2, 4] }
+  },
+  {
+    "palabras": ["Un", "perro", "grande", "ladra", "fuerte"],
+    "respuestas": { "articulo": [0], "sustantivo": [1], "adjetivo": [2, 4] }
+  },
+  {
+    "palabras": ["Los", "pájaros", "pequeños", "cantan", "alegres"],
+    "respuestas": { "articulo": [0], "sustantivo": [1], "adjetivo": [2, 4] }
+  },
+  {
+    "palabras": ["Una", "flor", "roja", "crece", "en", "el", "jardín", "verde"],
+    "respuestas": { "articulo": [0, 5], "sustantivo": [1, 6], "adjetivo": [2, 7] }
+  },
+  {
+    "palabras": ["Las", "estrellas", "brillantes", "iluminan", "la", "noche", "oscura"],
+    "respuestas": { "articulo": [0, 4], "sustantivo": [1, 5], "adjetivo": [2, 6] }
+  },
+  {
+    "palabras": ["El", "sol", "amarillo", "calienta", "la", "tierra", "seca"],
+    "respuestas": { "articulo": [0, 4], "sustantivo": [1, 5], "adjetivo": [2, 6] }
+  },
+  {
+    "palabras": ["Un", "pez", "azul", "nada", "en", "el", "río", "largo"],
+    "respuestas": { "articulo": [0, 5], "sustantivo": [1, 6], "adjetivo": [2, 7] }
+  },
+  {
+    "palabras": ["La", "casa", "vieja", "tiene", "un", "techo", "rojo"],
+    "respuestas": { "articulo": [0, 4], "sustantivo": [1, 5], "adjetivo": [2, 6] }
+  },
+  {
+    "palabras": ["Los", "niños", "contentos", "juegan", "en", "el", "parque", "nuevo"],
+    "respuestas": { "articulo": [0, 5], "sustantivo": [1, 6], "adjetivo": [2, 7] }
+  }
+]

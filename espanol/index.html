@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Español — Prácticas 3° Grado</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f9a8d4 0%, #ec4899 50%, #9d174d 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 16px 40px;
+    }
+
+    .volver {
+      align-self: flex-start;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 24px;
+      transition: color 0.2s;
+    }
+    .volver:hover { color: white; }
+
+    header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .icono-materia {
+      font-size: 3.5rem;
+      margin-bottom: 10px;
+    }
+
+    header h1 {
+      color: white;
+      font-size: 2.2rem;
+      text-shadow: 2px 3px 6px rgba(0,0,0,0.2);
+      margin-bottom: 6px;
+    }
+
+    header p {
+      color: rgba(255,255,255,0.85);
+      font-size: 1.05rem;
+    }
+
+    /* ---- Grid de evaluaciones ---- */
+    .evaluaciones {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .eval-card {
+      background: white;
+      border-radius: 20px;
+      padding: 28px 20px 24px;
+      text-align: center;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .eval-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.2);
+    }
+
+    .eval-numero {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f9a8d4, #ec4899);
+      color: white;
+      font-size: 1.8rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 10px rgba(236,72,153,0.4);
+    }
+
+    .eval-titulo {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #9d174d;
+    }
+
+    .eval-temas {
+      font-size: 0.88rem;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    .eval-badge {
+      font-size: 0.78rem;
+      font-weight: bold;
+      padding: 4px 12px;
+      border-radius: 50px;
+      background: #fce7f3;
+      color: #ec4899;
+    }
+
+    /* Deshabilitadas */
+    .eval-card.proximamente {
+      cursor: default;
+      opacity: 0.65;
+    }
+    .eval-card.proximamente:hover {
+      transform: none;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+    .eval-card.proximamente .eval-numero {
+      background: linear-gradient(135deg, #d1d5db, #9ca3af);
+      box-shadow: none;
+    }
+    .eval-card.proximamente .eval-badge {
+      background: #f3f4f6;
+      color: #9ca3af;
+    }
+
+    footer {
+      margin-top: 44px;
+      color: rgba(255,255,255,0.6);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 500px) {
+      header h1 { font-size: 1.7rem; }
+      .evaluaciones { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .eval-card { padding: 20px 12px 16px; gap: 8px; border-radius: 16px; }
+      .eval-numero { width: 52px; height: 52px; font-size: 1.5rem; }
+      .eval-titulo { font-size: 1rem; }
+      .eval-temas { font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="volver" href="../index.html">← Materias</a>
+
+  <header>
+    <div class="icono-materia">📖</div>
+    <h1>Español</h1>
+    <p>Selecciona una evaluación</p>
+  </header>
+
+  <div class="evaluaciones">
+
+    <!-- EVALUACIÓN 1 -->
+    <a class="eval-card" href="evaluacion1/index.html">
+      <div class="eval-numero">1</div>
+      <div class="eval-titulo">Evaluación 1</div>
+      <div class="eval-temas">Sustantivos · Artículos<br>Adj. calificativos y determinativos</div>
+      <div class="eval-badge">4 conjuntos · 40 oraciones</div>
+    </a>
+
+    <!-- EVALUACIÓN 2 (próximamente) -->
+    <div class="eval-card proximamente">
+      <div class="eval-numero">2</div>
+      <div class="eval-titulo">Evaluación 2</div>
+      <div class="eval-temas">Próximamente</div>
+      <div class="eval-badge">Próximamente</div>
+    </div>
+
+    <!-- EVALUACIÓN 3 (próximamente) -->
+    <div class="eval-card proximamente">
+      <div class="eval-numero">3</div>
+      <div class="eval-titulo">Evaluación 3</div>
+      <div class="eval-temas">Próximamente</div>
+      <div class="eval-badge">Próximamente</div>
+    </div>
+
+  </div>
+
+  <footer>Español · 3° Grado</footer>
+
+</body>
+</html>

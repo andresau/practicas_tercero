@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Práctica de Gramática</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: white;
+      font-size: 2rem;
+      margin-bottom: 6px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .subtitulo {
+      color: rgba(255,255,255,0.9);
+      font-size: 1.1rem;
+      margin-bottom: 18px;
+    }
+
+    /* --- Selector de conjunto --- */
+    .selector-conjunto {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .conjunto-btn {
+      padding: 10px 22px;
+      border: 3px solid rgba(255,255,255,0.4);
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: rgba(255,255,255,0.15);
+      color: white;
+    }
+    .conjunto-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.05); }
+    .conjunto-btn.activo {
+      background: white;
+      color: #6366f1;
+      border-color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .panel-superior {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .info-box {
+      background: white;
+      border-radius: 16px;
+      padding: 10px 22px;
+      font-size: 1.15rem;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .puntos-color { color: #f59e0b; }
+    .progreso-color { color: #6366f1; }
+
+    .contenedor {
+      background: white;
+      border-radius: 24px;
+      padding: 28px 32px;
+      max-width: 750px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+
+    .instruccion {
+      font-size: 1.1rem;
+      color: #555;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .leyenda {
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    .leyenda-item { display: flex; align-items: center; gap: 6px; }
+    .leyenda-dot {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+    }
+
+    /* --- Oración --- */
+    .oracion {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 24px;
+      min-height: 70px;
+      position: relative;
+    }
+
+    .palabra-wrap {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .palabra {
+      padding: 14px 22px;
+      border: 3px solid #d1d5db;
+      border-radius: 14px;
+      font-size: 1.35rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #f9fafb;
+      user-select: none;
+      position: relative;
+    }
+    .palabra:hover { transform: scale(1.06); box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+
+    /* Colores: Rojo=artículo, Azul=sustantivo, Verde=adjetivo */
+    .palabra.sel-articulo { border-color: #ef4444; background: #fee2e2; color: #b91c1c; }
+    .palabra.sel-sustantivo { border-color: #3b82f6; background: #dbeafe; color: #1d4ed8; }
+    .palabra.sel-adjetivo { border-color: #22c55e; background: #dcfce7; color: #15803d; }
+
+    .etiqueta {
+      font-size: 0.7rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+    }
+    .etiqueta.et-articulo { color: #ef4444; }
+    .etiqueta.et-sustantivo { color: #3b82f6; }
+    .etiqueta.et-adjetivo { color: #22c55e; }
+
+    /* Resultado */
+    .palabra.correcta {
+      border-color: #22c55e !important; background: #bbf7d0 !important; color: #166534 !important;
+      animation: pulso 0.4s;
+    }
+    .palabra.incorrecta {
+      border-color: #ef4444 !important; background: #fecaca !important; color: #991b1b !important;
+      animation: sacudir 0.4s;
+    }
+    .palabra.faltante {
+      border-color: #a855f7 !important; background: #f3e8ff !important; color: #7e22ce !important;
+      animation: pulso 0.4s;
+    }
+
+    @keyframes pulso {
+      0%,100% { transform: scale(1); }
+      50% { transform: scale(1.12); }
+    }
+    @keyframes sacudir {
+      0%,100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+
+    /* --- Popup --- */
+    .popup {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-top: 8px;
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+      padding: 8px;
+      display: flex;
+      gap: 6px;
+      z-index: 100;
+      animation: aparecer 0.15s ease-out;
+    }
+    .popup::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 8px solid white;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: translateX(-50%) translateY(4px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    .popup-btn {
+      padding: 8px 14px;
+      border: 2px solid;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .popup-btn:hover { transform: scale(1.08); }
+
+    .popup-btn.pop-articulo { border-color: #ef4444; background: #fee2e2; color: #b91c1c; }
+    .popup-btn.pop-sustantivo { border-color: #3b82f6; background: #dbeafe; color: #1d4ed8; }
+    .popup-btn.pop-adjetivo { border-color: #22c55e; background: #dcfce7; color: #15803d; }
+    .popup-btn.pop-quitar { border-color: #9ca3af; background: #f3f4f6; color: #6b7280; }
+
+    /* --- Botones --- */
+    .acciones {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 13px 34px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: white;
+    }
+    .btn:hover { transform: scale(1.05); }
+
+    .btn-verificar { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+    .btn-siguiente { background: linear-gradient(135deg, #10b981, #059669); }
+    .btn-reiniciar { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .btn-limpiar { background: linear-gradient(135deg, #94a3b8, #64748b); }
+
+    .retroalimentacion {
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 18px;
+      min-height: 36px;
+    }
+
+    .final { text-align: center; padding: 40px 20px; }
+    .final h2 { font-size: 2rem; color: #6366f1; margin-bottom: 16px; }
+    .final p { font-size: 1.2rem; margin-bottom: 16px; color: #333; }
+
+    .nota-circulo {
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-weight: bold;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      animation: pulso 0.6s;
+    }
+    .nota-circulo .numero { font-size: 3rem; line-height: 1; }
+    .nota-circulo .de-cien { font-size: 0.9rem; opacity: 0.8; }
+
+    .nota-excelente { background: linear-gradient(135deg, #22c55e, #16a34a); color: white; }
+    .nota-buena { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
+    .nota-regular { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+    .nota-baja { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+
+    .puntos-animados { animation: pulso 0.4s; }
+
+    /* --- Overlay móvil para popup --- */
+    .popup-overlay {
+      display: none;
+    }
+
+    /* ================================
+       RESPONSIVE - MÓVILES
+       ================================ */
+    @media (max-width: 600px) {
+      body { padding: 12px 8px; }
+
+      h1 { font-size: 1.5rem; margin-bottom: 4px; }
+      .subtitulo { font-size: 0.95rem; margin-bottom: 12px; }
+
+      .selector-conjunto { gap: 6px; margin-bottom: 12px; }
+      .conjunto-btn { padding: 8px 14px; font-size: 0.85rem; border-width: 2px; }
+
+      .panel-superior { gap: 10px; margin-bottom: 10px; }
+      .info-box { padding: 8px 14px; font-size: 1rem; border-radius: 12px; }
+
+      .contenedor { padding: 16px 12px; border-radius: 18px; }
+      .instruccion { font-size: 0.95rem; margin-bottom: 10px; }
+
+      .leyenda { gap: 12px; font-size: 0.8rem; margin-bottom: 14px; }
+      .leyenda-dot { width: 14px; height: 14px; }
+
+      .oracion { gap: 8px; margin-bottom: 18px; min-height: 50px; }
+
+      .palabra {
+        padding: 10px 14px;
+        font-size: 1.1rem;
+        border-radius: 10px;
+        border-width: 2px;
+      }
+
+      .etiqueta { font-size: 0.6rem; }
+
+      /* En móvil: popup como overlay fijo en la parte inferior */
+      .popup {
+        display: none !important;
+      }
+
+      .popup-overlay {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 200;
+        align-items: flex-end;
+        justify-content: center;
+        animation: fadeIn 0.15s ease-out;
+      }
+
+      .popup-overlay .popup-panel {
+        background: white;
+        border-radius: 20px 20px 0 0;
+        padding: 20px 16px 28px;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+        animation: slideUp 0.2s ease-out;
+      }
+
+      .popup-overlay .popup-palabra {
+        text-align: center;
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 14px;
+      }
+
+      .popup-overlay .popup-opciones {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .popup-overlay .popup-btn {
+        padding: 12px 20px;
+        font-size: 1rem;
+        border-radius: 12px;
+        flex: 1;
+        min-width: 0;
+        text-align: center;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      @keyframes slideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+
+      .acciones { gap: 8px; }
+      .btn { padding: 12px 24px; font-size: 1rem; }
+
+      .retroalimentacion { font-size: 1rem; margin-top: 14px; }
+
+      .final { padding: 24px 12px; }
+      .final h2 { font-size: 1.6rem; }
+      .final p { font-size: 1.05rem; }
+      .nota-circulo { width: 120px; height: 120px; }
+      .nota-circulo .numero { font-size: 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="../index.html" style="align-self:flex-start;color:rgba(255,255,255,0.9);text-decoration:none;font-weight:bold;font-size:1rem;margin-bottom:8px;display:flex;align-items:center;gap:6px;">← Español</a>
+
+  <h1>Práctica de Gramática</h1>
+  <p class="subtitulo">Evaluación 1 · Toca cada palabra y elige qué es</p>
+
+  <!-- Selector de conjunto -->
+  <div class="selector-conjunto" id="selector-conjunto"></div>
+
+  <div class="panel-superior">
+    <div class="info-box puntos-color" id="puntos-display">Puntos: 0</div>
+    <div class="info-box progreso-color" id="progreso-display">Oración 1 de --</div>
+  </div>
+
+  <div class="contenedor" id="contenedor-juego">
+    <p class="instruccion">Toca una palabra para clasificarla</p>
+
+    <div class="leyenda">
+      <div class="leyenda-item">
+        <div class="leyenda-dot" style="background:#ef4444;"></div> Artículo
+      </div>
+      <div class="leyenda-item">
+        <div class="leyenda-dot" style="background:#3b82f6;"></div> Sustantivo
+      </div>
+      <div class="leyenda-item">
+        <div class="leyenda-dot" style="background:#22c55e;"></div> Adjetivo
+      </div>
+    </div>
+
+    <div class="oracion" id="oracion"></div>
+
+    <div class="acciones">
+      <button class="btn btn-limpiar" onclick="limpiarSelecciones()">Limpiar</button>
+      <button class="btn btn-verificar" id="btn-verificar" onclick="verificar()">Verificar</button>
+      <button class="btn btn-siguiente" id="btn-siguiente" onclick="siguiente()" style="display:none;">Siguiente</button>
+    </div>
+
+    <div class="retroalimentacion" id="retroalimentacion"></div>
+  </div>
+
+  <script>
+    // =====================================================
+    // CONJUNTOS DE ORACIONES
+    // Cada conjunto tiene: id, nombre, archivo JSON, y fallback.
+    // Para agregar un nuevo conjunto:
+    //   1. Crea el archivo .json
+    //   2. Agrega una entrada aquí en conjuntos[]
+    // =====================================================
+
+    const conjuntos = [
+      {
+        id: 'calificativos',
+        nombre: 'Adj. Calificativos',
+        archivo: 'oraciones.json',
+        fallback: [
+          { palabras: ["El", "gato", "negro", "duerme", "tranquilo"], respuestas: { articulo: [0], sustantivo: [1], adjetivo: [2, 4] } },
+          { palabras: ["La", "niña", "bonita", "corre", "rápido"], respuestas: { articulo: [0], sustantivo: [1], adjetivo: [2, 4] } },
+          { palabras: ["Un", "perro", "grande", "ladra", "fuerte"], respuestas: { articulo: [0], sustantivo: [1], adjetivo: [2, 4] } },
+          { palabras: ["Los", "pájaros", "pequeños", "cantan", "alegres"], respuestas: { articulo: [0], sustantivo: [1], adjetivo: [2, 4] } },
+          { palabras: ["Una", "flor", "roja", "crece", "en", "el", "jardín", "verde"], respuestas: { articulo: [0, 5], sustantivo: [1, 6], adjetivo: [2, 7] } },
+          { palabras: ["Las", "estrellas", "brillantes", "iluminan", "la", "noche", "oscura"], respuestas: { articulo: [0, 4], sustantivo: [1, 5], adjetivo: [2, 6] } },
+          { palabras: ["El", "sol", "amarillo", "calienta", "la", "tierra", "seca"], respuestas: { articulo: [0, 4], sustantivo: [1, 5], adjetivo: [2, 6] } },
+          { palabras: ["Un", "pez", "azul", "nada", "en", "el", "río", "largo"], respuestas: { articulo: [0, 5], sustantivo: [1, 6], adjetivo: [2, 7] } },
+          { palabras: ["La", "casa", "vieja", "tiene", "un", "techo", "rojo"], respuestas: { articulo: [0, 4], sustantivo: [1, 5], adjetivo: [2, 6] } },
+          { palabras: ["Los", "niños", "contentos", "juegan", "en", "el", "parque", "nuevo"], respuestas: { articulo: [0, 5], sustantivo: [1, 6], adjetivo: [2, 7] } },
+        ]
+      },
+      {
+        id: 'determinativos',
+        nombre: 'Adj. Determinativos',
+        archivo: 'oraciones_determinativos.json',
+        fallback: [
+          { palabras: ["Mi", "gato", "pequeño", "duerme", "en", "la", "cama", "suave"], respuestas: { articulo: [5], sustantivo: [1, 6], adjetivo: [0, 2, 7] } },
+          { palabras: ["Nuestro", "perro", "fiel", "cuida", "la", "casa", "grande"], respuestas: { articulo: [4], sustantivo: [1, 5], adjetivo: [0, 2, 6] } },
+          { palabras: ["Estos", "niños", "alegres", "juegan", "en", "el", "parque", "bonito"], respuestas: { articulo: [5], sustantivo: [1, 6], adjetivo: [0, 2, 7] } },
+          { palabras: ["Su", "mamá", "cariñosa", "prepara", "una", "comida", "rica"], respuestas: { articulo: [4], sustantivo: [1, 5], adjetivo: [0, 2, 6] } },
+          { palabras: ["Estas", "flores", "rojas", "adornan", "nuestra", "mesa", "redonda"], respuestas: { articulo: [], sustantivo: [1, 5], adjetivo: [0, 2, 4, 6] } },
+          { palabras: ["Mi", "hermana", "mayor", "lee", "un", "libro", "interesante"], respuestas: { articulo: [4], sustantivo: [1, 5], adjetivo: [0, 2, 6] } },
+          { palabras: ["Nuestros", "amigos", "divertidos", "vienen", "a", "su", "fiesta", "especial"], respuestas: { articulo: [], sustantivo: [1, 6], adjetivo: [0, 2, 5, 7] } },
+          { palabras: ["Este", "río", "largo", "cruza", "mi", "pueblo", "tranquilo"], respuestas: { articulo: [], sustantivo: [1, 5], adjetivo: [0, 2, 4, 6] } },
+          { palabras: ["Sus", "ojos", "brillantes", "miran", "el", "cielo", "azul"], respuestas: { articulo: [4], sustantivo: [1, 5], adjetivo: [0, 2, 6] } },
+          { palabras: ["Nuestra", "maestra", "amable", "tiene", "un", "vestido", "nuevo"], respuestas: { articulo: [4], sustantivo: [1, 5], adjetivo: [0, 2, 6] } },
+        ]
+      },
+      {
+        id: 'mixtas',
+        nombre: 'Mezcla Total',
+        archivo: 'oraciones_mixtas.json',
+        fallback: [
+          { palabras: ["Mi", "abuela", "querida", "cocina", "unas", "galletas", "deliciosas"], respuestas: { articulo: [4], sustantivo: [1, 5], adjetivo: [0, 2, 6] } },
+          { palabras: ["El", "viento", "fuerte", "mueve", "estos", "árboles", "altos"], respuestas: { articulo: [0], sustantivo: [1, 5], adjetivo: [2, 4, 6] } },
+          { palabras: ["Nuestra", "vecina", "simpática", "tiene", "un", "jardín", "hermoso"], respuestas: { articulo: [4], sustantivo: [1, 5], adjetivo: [0, 2, 6] } },
+          { palabras: ["Los", "ratones", "grises", "comen", "su", "queso", "favorito"], respuestas: { articulo: [0], sustantivo: [1, 5], adjetivo: [2, 4, 6] } },
+          { palabras: ["Esta", "montaña", "nevada", "se", "ve", "desde", "mi", "ventana", "grande"], respuestas: { articulo: [], sustantivo: [1, 7], adjetivo: [0, 2, 6, 8] } },
+          { palabras: ["Sus", "hijos", "traviesos", "rompieron", "la", "ventana", "nueva"], respuestas: { articulo: [4], sustantivo: [1, 5], adjetivo: [0, 2, 6] } },
+          { palabras: ["Un", "payaso", "gracioso", "usa", "estos", "zapatos", "enormes"], respuestas: { articulo: [0], sustantivo: [1, 5], adjetivo: [2, 4, 6] } },
+          { palabras: ["Nuestro", "maestro", "paciente", "explica", "las", "lecciones", "difíciles"], respuestas: { articulo: [4], sustantivo: [1, 5], adjetivo: [0, 2, 6] } },
+          { palabras: ["Mi", "tortuga", "lenta", "come", "una", "lechuga", "fresca"], respuestas: { articulo: [4], sustantivo: [1, 5], adjetivo: [0, 2, 6] } },
+          { palabras: ["Esas", "nubes", "oscuras", "cubren", "el", "cielo", "azul"], respuestas: { articulo: [4], sustantivo: [1, 5], adjetivo: [0, 2, 6] } },
+        ]
+      },
+      {
+        id: 'desafio',
+        nombre: 'Desafío',
+        archivo: 'oraciones_desafio.json',
+        fallback: [
+          { palabras: ["La", "pequeña", "ardilla", "veloz", "sube", "por", "el", "árbol", "alto"], respuestas: { articulo: [0, 6], sustantivo: [2, 7], adjetivo: [1, 3, 8] } },
+          { palabras: ["Mi", "primo", "favorito", "dibuja", "unos", "dragones", "fantásticos"], respuestas: { articulo: [4], sustantivo: [1, 5], adjetivo: [0, 2, 6] } },
+          { palabras: ["Estos", "dulces", "ricos", "son", "de", "nuestra", "tienda", "preferida"], respuestas: { articulo: [], sustantivo: [1, 6], adjetivo: [0, 2, 5, 7] } },
+          { palabras: ["Las", "mariposas", "coloridas", "vuelan", "sobre", "su", "campo", "florido"], respuestas: { articulo: [0], sustantivo: [1, 6], adjetivo: [2, 5, 7] } },
+          { palabras: ["Un", "robot", "plateado", "limpia", "esta", "cocina", "moderna"], respuestas: { articulo: [0], sustantivo: [1, 5], adjetivo: [2, 4, 6] } },
+          { palabras: ["Nuestros", "abuelos", "cariñosos", "cuentan", "unas", "historias", "increíbles"], respuestas: { articulo: [4], sustantivo: [1, 5], adjetivo: [0, 2, 6] } },
+          { palabras: ["El", "lago", "profundo", "refleja", "las", "montañas", "nevadas"], respuestas: { articulo: [0, 4], sustantivo: [1, 5], adjetivo: [2, 6] } },
+          { palabras: ["Su", "gatita", "juguetona", "persigue", "una", "pelota", "roja"], respuestas: { articulo: [4], sustantivo: [1, 5], adjetivo: [0, 2, 6] } },
+          { palabras: ["Esos", "piratas", "valientes", "buscan", "un", "tesoro", "escondido"], respuestas: { articulo: [4], sustantivo: [1, 5], adjetivo: [0, 2, 6] } },
+          { palabras: ["Mi", "ciudad", "natal", "tiene", "unas", "calles", "estrechas", "y", "bonitas"], respuestas: { articulo: [4], sustantivo: [1, 5], adjetivo: [0, 2, 6, 8] } },
+        ]
+      },
+    ];
+
+    // Estado
+    let conjuntoActual = 0;
+    let oraciones = [];
+    let indiceActual = 0;
+    let puntos = 0;
+    let totalAciertos = 0;
+    let totalPosibles = 0;
+    let selecciones = {};
+    let verificado = false;
+    let popupAbierto = null;
+
+    // --- Selector de conjuntos ---
+    function renderSelector() {
+      const contenedor = document.getElementById('selector-conjunto');
+      contenedor.innerHTML = '';
+      conjuntos.forEach((c, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'conjunto-btn' + (i === conjuntoActual ? ' activo' : '');
+        btn.textContent = c.nombre;
+        btn.onclick = () => cambiarConjunto(i);
+        contenedor.appendChild(btn);
+      });
+    }
+
+    async function cambiarConjunto(indice) {
+      conjuntoActual = indice;
+      renderSelector();
+      await cargarConjunto();
+    }
+
+    async function cargarConjunto() {
+      const conjunto = conjuntos[conjuntoActual];
+      try {
+        const resp = await fetch(conjunto.archivo);
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        oraciones = await resp.json();
+      } catch (e) {
+        console.log('Usando fallback para ' + conjunto.id + ':', e.message);
+        oraciones = conjunto.fallback;
+      }
+      indiceActual = 0;
+      puntos = 0;
+      totalAciertos = 0;
+      totalPosibles = 0;
+      actualizarPuntos();
+      resetearUI();
+      cargarOracion();
+    }
+
+    function resetearUI() {
+      const juego = document.getElementById('contenedor-juego');
+      // Si se había mostrado la pantalla final, reconstruir el HTML interno
+      if (!document.getElementById('oracion')) {
+        juego.innerHTML = `
+          <p class="instruccion">Toca una palabra para clasificarla</p>
+          <div class="leyenda">
+            <div class="leyenda-item"><div class="leyenda-dot" style="background:#ef4444;"></div> Artículo</div>
+            <div class="leyenda-item"><div class="leyenda-dot" style="background:#3b82f6;"></div> Sustantivo</div>
+            <div class="leyenda-item"><div class="leyenda-dot" style="background:#22c55e;"></div> Adjetivo</div>
+          </div>
+          <div class="oracion" id="oracion"></div>
+          <div class="acciones">
+            <button class="btn btn-limpiar" onclick="limpiarSelecciones()">Limpiar</button>
+            <button class="btn btn-verificar" id="btn-verificar" onclick="verificar()">Verificar</button>
+            <button class="btn btn-siguiente" id="btn-siguiente" onclick="siguiente()" style="display:none;">Siguiente</button>
+          </div>
+          <div class="retroalimentacion" id="retroalimentacion"></div>
+        `;
+      }
+    }
+
+    function cargarOracion() {
+      verificado = false;
+      selecciones = {};
+      popupAbierto = null;
+
+      document.getElementById('retroalimentacion').textContent = '';
+      document.getElementById('btn-verificar').style.display = '';
+      document.getElementById('btn-siguiente').style.display = 'none';
+      document.getElementById('progreso-display').textContent =
+        `Oración ${indiceActual + 1} de ${oraciones.length}`;
+
+      renderOracion();
+    }
+
+    function esMobile() {
+      return window.innerWidth <= 600;
+    }
+
+    function renderOracion() {
+      const oracion = oraciones[indiceActual];
+      const contenedor = document.getElementById('oracion');
+      contenedor.innerHTML = '';
+
+      // Quitar overlay móvil previo
+      cerrarOverlay();
+
+      oracion.palabras.forEach((palabra, i) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'palabra-wrap';
+
+        const btn = document.createElement('button');
+        btn.className = 'palabra';
+        btn.textContent = palabra;
+
+        if (selecciones[i]) {
+          btn.classList.add('sel-' + selecciones[i]);
+        }
+
+        if (!verificado) {
+          btn.onclick = (e) => {
+            e.stopPropagation();
+            abrirPopup(i);
+          };
+        }
+
+        wrap.appendChild(btn);
+
+        if (selecciones[i]) {
+          const et = document.createElement('span');
+          const nombres = { articulo: 'Artículo', sustantivo: 'Sustantivo', adjetivo: 'Adjetivo' };
+          et.className = 'etiqueta et-' + selecciones[i];
+          et.textContent = nombres[selecciones[i]];
+          wrap.appendChild(et);
+        }
+
+        // Popup desktop (en móvil se oculta por CSS)
+        if (popupAbierto === i && !verificado) {
+          const popup = crearPopupDesktop(i);
+          wrap.appendChild(popup);
+        }
+
+        contenedor.appendChild(wrap);
+      });
+
+      // Overlay móvil
+      if (popupAbierto !== null && !verificado && esMobile()) {
+        mostrarOverlayMobile(popupAbierto);
+      }
+    }
+
+    function crearPopupDesktop(indice) {
+      const popup = document.createElement('div');
+      popup.className = 'popup';
+      popup.onclick = (e) => e.stopPropagation();
+
+      crearBotonesPopup(indice, popup);
+      return popup;
+    }
+
+    function mostrarOverlayMobile(indice) {
+      cerrarOverlay();
+
+      const oracion = oraciones[indiceActual];
+      const palabra = oracion.palabras[indice];
+
+      const overlay = document.createElement('div');
+      overlay.className = 'popup-overlay';
+      overlay.id = 'popup-overlay';
+      overlay.onclick = (e) => {
+        if (e.target === overlay) {
+          popupAbierto = null;
+          cerrarOverlay();
+        }
+      };
+
+      const panel = document.createElement('div');
+      panel.className = 'popup-panel';
+
+      const titulo = document.createElement('div');
+      titulo.className = 'popup-palabra';
+      titulo.textContent = '¿Qué es "' + palabra + '"?';
+      panel.appendChild(titulo);
+
+      const opciones = document.createElement('div');
+      opciones.className = 'popup-opciones';
+      crearBotonesPopup(indice, opciones);
+      panel.appendChild(opciones);
+
+      overlay.appendChild(panel);
+      document.body.appendChild(overlay);
+    }
+
+    function cerrarOverlay() {
+      const existing = document.getElementById('popup-overlay');
+      if (existing) existing.remove();
+    }
+
+    function crearBotonesPopup(indice, contenedor) {
+      const opciones = [
+        { cat: 'articulo', label: 'Artículo', clase: 'pop-articulo' },
+        { cat: 'sustantivo', label: 'Sustantivo', clase: 'pop-sustantivo' },
+        { cat: 'adjetivo', label: 'Adjetivo', clase: 'pop-adjetivo' },
+      ];
+
+      if (selecciones[indice]) {
+        opciones.push({ cat: null, label: '✕ Quitar', clase: 'pop-quitar' });
+      }
+
+      opciones.forEach(op => {
+        const btn = document.createElement('button');
+        btn.className = 'popup-btn ' + op.clase;
+        btn.textContent = op.label;
+        btn.onclick = (e) => {
+          e.stopPropagation();
+          if (op.cat === null) {
+            delete selecciones[indice];
+          } else {
+            selecciones[indice] = op.cat;
+          }
+          popupAbierto = null;
+          cerrarOverlay();
+          renderOracion();
+        };
+        contenedor.appendChild(btn);
+      });
+    }
+
+    function abrirPopup(indice) {
+      popupAbierto = (popupAbierto === indice) ? null : indice;
+      renderOracion();
+    }
+
+    document.addEventListener('click', (e) => {
+      if (popupAbierto !== null && !esMobile()) {
+        popupAbierto = null;
+        renderOracion();
+      }
+    });
+
+    function limpiarSelecciones() {
+      if (verificado) return;
+      selecciones = {};
+      popupAbierto = null;
+      renderOracion();
+      document.getElementById('retroalimentacion').textContent = '';
+    }
+
+    function verificar() {
+      const oracion = oraciones[indiceActual];
+      const respuestas = oracion.respuestas;
+      verificado = true;
+      popupAbierto = null;
+
+      let correctas = 0;
+      let incorrectas = 0;
+      let faltantes = 0;
+
+      const respuestasMap = {};
+      for (const cat of ['articulo', 'sustantivo', 'adjetivo']) {
+        for (const idx of respuestas[cat]) {
+          respuestasMap[idx] = cat;
+        }
+      }
+
+      const contenedor = document.getElementById('oracion');
+      contenedor.innerHTML = '';
+      const nombres = { articulo: 'Artículo', sustantivo: 'Sustantivo', adjetivo: 'Adjetivo' };
+
+      oracion.palabras.forEach((palabra, i) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'palabra-wrap';
+
+        const btn = document.createElement('button');
+        btn.className = 'palabra';
+        btn.textContent = palabra;
+
+        const sel = selecciones[i] || null;
+        const correcta = respuestasMap[i] || null;
+
+        let etiquetaTexto = '';
+        let etiquetaCat = '';
+
+        if (sel && sel === correcta) {
+          btn.classList.add('correcta');
+          correctas++;
+          etiquetaTexto = nombres[sel];
+          etiquetaCat = sel;
+        } else if (sel && sel !== correcta) {
+          btn.classList.add('incorrecta');
+          incorrectas++;
+          if (correcta) {
+            etiquetaTexto = '→ ' + nombres[correcta];
+            etiquetaCat = correcta;
+          }
+        } else if (!sel && correcta) {
+          btn.classList.add('faltante');
+          faltantes++;
+          etiquetaTexto = '→ ' + nombres[correcta];
+          etiquetaCat = correcta;
+        }
+
+        wrap.appendChild(btn);
+
+        if (etiquetaTexto) {
+          const et = document.createElement('span');
+          et.className = 'etiqueta et-' + etiquetaCat;
+          et.textContent = etiquetaTexto;
+          wrap.appendChild(et);
+        }
+
+        contenedor.appendChild(wrap);
+      });
+
+      // Acumular para calificación final
+      const totalEnEsta = Object.keys(respuestasMap).length;
+      totalAciertos += correctas;
+      totalPosibles += totalEnEsta;
+
+      const puntosGanados = (correctas * 10) - (incorrectas * 5);
+      puntos = Math.max(0, puntos + puntosGanados);
+      actualizarPuntos();
+
+      const retro = document.getElementById('retroalimentacion');
+      const totalCorrectas = totalEnEsta;
+
+      if (correctas === totalCorrectas && incorrectas === 0) {
+        retro.innerHTML = '¡Excelente! ¡Todo correcto! <span style="color:#f59e0b">+' + (correctas * 10) + ' pts</span>';
+        retro.style.color = '#16a34a';
+      } else {
+        let msg = `Correctas: ${correctas} · Incorrectas: ${incorrectas} · Faltaron: ${faltantes}`;
+        if (puntosGanados > 0) msg += ` · <span style="color:#16a34a">+${puntosGanados} pts</span>`;
+        else if (puntosGanados < 0) msg += ` · <span style="color:#ef4444">${puntosGanados} pts</span>`;
+        retro.innerHTML = msg;
+        retro.style.color = '#555';
+
+        if (faltantes > 0) {
+          retro.innerHTML += '<br><span style="font-size:0.9rem;color:#7e22ce;">Las moradas son las que te faltaron</span>';
+        }
+      }
+
+      document.getElementById('btn-verificar').style.display = 'none';
+      document.getElementById('btn-siguiente').style.display = '';
+    }
+
+    function siguiente() {
+      indiceActual++;
+      if (indiceActual >= oraciones.length) {
+        mostrarFinal();
+      } else {
+        cargarOracion();
+      }
+    }
+
+    function mostrarFinal() {
+      const contenedor = document.getElementById('contenedor-juego');
+
+      // Calificación de 0 a 100 basada en aciertos reales
+      const calificacion = totalPosibles > 0
+        ? Math.round((totalAciertos / totalPosibles) * 100)
+        : 0;
+
+      let mensaje, claseNota;
+      if (calificacion >= 90) {
+        mensaje = '¡Excelente! ¡Eres un campeón de la gramática!';
+        claseNota = 'nota-excelente';
+      } else if (calificacion >= 70) {
+        mensaje = '¡Muy bien! Vas por buen camino.';
+        claseNota = 'nota-buena';
+      } else if (calificacion >= 50) {
+        mensaje = '¡Bien! Sigue practicando para mejorar.';
+        claseNota = 'nota-regular';
+      } else {
+        mensaje = '¡Buen intento! Practica más y mejorarás.';
+        claseNota = 'nota-baja';
+      }
+
+      contenedor.innerHTML = `
+        <div class="final">
+          <h2>¡Terminaste!</h2>
+          <div class="nota-circulo ${claseNota}">
+            <span class="numero">${calificacion}</span>
+            <span class="de-cien">de 100</span>
+          </div>
+          <p>${mensaje}</p>
+          <p style="font-size:1rem;color:#888;">Acertaste ${totalAciertos} de ${totalPosibles} palabras · ${puntos} puntos</p>
+          <button class="btn btn-reiniciar" onclick="cambiarConjunto(conjuntoActual)">Repetir</button>
+        </div>
+      `;
+    }
+
+    function actualizarPuntos() {
+      const el = document.getElementById('puntos-display');
+      el.textContent = `Puntos: ${puntos}`;
+      el.classList.remove('puntos-animados');
+      void el.offsetWidth;
+      el.classList.add('puntos-animados');
+    }
+
+    // Arrancar
+    renderSelector();
+    cargarConjunto();
+  </script>
+</body>
+</html>
