@@ -286,6 +286,117 @@
     .nota-baja { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
 
     .puntos-animados { animation: pulso 0.4s; }
+
+    /* --- Overlay móvil para popup --- */
+    .popup-overlay {
+      display: none;
+    }
+
+    /* ================================
+       RESPONSIVE - MÓVILES
+       ================================ */
+    @media (max-width: 600px) {
+      body { padding: 12px 8px; }
+
+      h1 { font-size: 1.5rem; margin-bottom: 4px; }
+      .subtitulo { font-size: 0.95rem; margin-bottom: 12px; }
+
+      .selector-conjunto { gap: 6px; margin-bottom: 12px; }
+      .conjunto-btn { padding: 8px 14px; font-size: 0.85rem; border-width: 2px; }
+
+      .panel-superior { gap: 10px; margin-bottom: 10px; }
+      .info-box { padding: 8px 14px; font-size: 1rem; border-radius: 12px; }
+
+      .contenedor { padding: 16px 12px; border-radius: 18px; }
+      .instruccion { font-size: 0.95rem; margin-bottom: 10px; }
+
+      .leyenda { gap: 12px; font-size: 0.8rem; margin-bottom: 14px; }
+      .leyenda-dot { width: 14px; height: 14px; }
+
+      .oracion { gap: 8px; margin-bottom: 18px; min-height: 50px; }
+
+      .palabra {
+        padding: 10px 14px;
+        font-size: 1.1rem;
+        border-radius: 10px;
+        border-width: 2px;
+      }
+
+      .etiqueta { font-size: 0.6rem; }
+
+      /* En móvil: popup como overlay fijo en la parte inferior */
+      .popup {
+        display: none !important;
+      }
+
+      .popup-overlay {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 200;
+        align-items: flex-end;
+        justify-content: center;
+        animation: fadeIn 0.15s ease-out;
+      }
+
+      .popup-overlay .popup-panel {
+        background: white;
+        border-radius: 20px 20px 0 0;
+        padding: 20px 16px 28px;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 -4px 20px rgba(0,0,0,0.2);
+        animation: slideUp 0.2s ease-out;
+      }
+
+      .popup-overlay .popup-palabra {
+        text-align: center;
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 14px;
+      }
+
+      .popup-overlay .popup-opciones {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .popup-overlay .popup-btn {
+        padding: 12px 20px;
+        font-size: 1rem;
+        border-radius: 12px;
+        flex: 1;
+        min-width: 0;
+        text-align: center;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      @keyframes slideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+
+      .acciones { gap: 8px; }
+      .btn { padding: 12px 24px; font-size: 1rem; }
+
+      .retroalimentacion { font-size: 1rem; margin-top: 14px; }
+
+      .final { padding: 24px 12px; }
+      .final h2 { font-size: 1.6rem; }
+      .final p { font-size: 1.05rem; }
+      .nota-circulo { width: 120px; height: 120px; }
+      .nota-circulo .numero { font-size: 2.5rem; }
+    }
   </style>
 </head>
 <body>
@@ -492,10 +603,17 @@
       renderOracion();
     }
 
+    function esMobile() {
+      return window.innerWidth <= 600;
+    }
+
     function renderOracion() {
       const oracion = oraciones[indiceActual];
       const contenedor = document.getElementById('oracion');
       contenedor.innerHTML = '';
+
+      // Quitar overlay móvil previo
+      cerrarOverlay();
 
       oracion.palabras.forEach((palabra, i) => {
         const wrap = document.createElement('div');
@@ -526,20 +644,69 @@
           wrap.appendChild(et);
         }
 
+        // Popup desktop (en móvil se oculta por CSS)
         if (popupAbierto === i && !verificado) {
-          const popup = crearPopup(i);
+          const popup = crearPopupDesktop(i);
           wrap.appendChild(popup);
         }
 
         contenedor.appendChild(wrap);
       });
+
+      // Overlay móvil
+      if (popupAbierto !== null && !verificado && esMobile()) {
+        mostrarOverlayMobile(popupAbierto);
+      }
     }
 
-    function crearPopup(indice) {
+    function crearPopupDesktop(indice) {
       const popup = document.createElement('div');
       popup.className = 'popup';
       popup.onclick = (e) => e.stopPropagation();
 
+      crearBotonesPopup(indice, popup);
+      return popup;
+    }
+
+    function mostrarOverlayMobile(indice) {
+      cerrarOverlay();
+
+      const oracion = oraciones[indiceActual];
+      const palabra = oracion.palabras[indice];
+
+      const overlay = document.createElement('div');
+      overlay.className = 'popup-overlay';
+      overlay.id = 'popup-overlay';
+      overlay.onclick = (e) => {
+        if (e.target === overlay) {
+          popupAbierto = null;
+          cerrarOverlay();
+        }
+      };
+
+      const panel = document.createElement('div');
+      panel.className = 'popup-panel';
+
+      const titulo = document.createElement('div');
+      titulo.className = 'popup-palabra';
+      titulo.textContent = '¿Qué es "' + palabra + '"?';
+      panel.appendChild(titulo);
+
+      const opciones = document.createElement('div');
+      opciones.className = 'popup-opciones';
+      crearBotonesPopup(indice, opciones);
+      panel.appendChild(opciones);
+
+      overlay.appendChild(panel);
+      document.body.appendChild(overlay);
+    }
+
+    function cerrarOverlay() {
+      const existing = document.getElementById('popup-overlay');
+      if (existing) existing.remove();
+    }
+
+    function crearBotonesPopup(indice, contenedor) {
       const opciones = [
         { cat: 'articulo', label: 'Artículo', clase: 'pop-articulo' },
         { cat: 'sustantivo', label: 'Sustantivo', clase: 'pop-sustantivo' },
@@ -547,7 +714,7 @@
       ];
 
       if (selecciones[indice]) {
-        opciones.push({ cat: null, label: '✕', clase: 'pop-quitar' });
+        opciones.push({ cat: null, label: '✕ Quitar', clase: 'pop-quitar' });
       }
 
       opciones.forEach(op => {
@@ -562,12 +729,11 @@
             selecciones[indice] = op.cat;
           }
           popupAbierto = null;
+          cerrarOverlay();
           renderOracion();
         };
-        popup.appendChild(btn);
+        contenedor.appendChild(btn);
       });
-
-      return popup;
     }
 
     function abrirPopup(indice) {
@@ -575,8 +741,8 @@
       renderOracion();
     }
 
-    document.addEventListener('click', () => {
-      if (popupAbierto !== null) {
+    document.addEventListener('click', (e) => {
+      if (popupAbierto !== null && !esMobile()) {
         popupAbierto = null;
         renderOracion();
       }
