@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spelling Bee · 3° Grado</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #c084fc 0%, #7e22ce 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 16px 40px;
+    }
+
+    .volver {
+      align-self: flex-start;
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .volver:hover { color: white; }
+
+    h1 {
+      color: white;
+      font-size: 2rem;
+      text-shadow: 2px 3px 6px rgba(0,0,0,0.25);
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .subtitulo {
+      color: rgba(255,255,255,0.85);
+      font-size: 1rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* Counter pill */
+    .panel-superior {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+      justify-content: center;
+    }
+
+    .info-box {
+      background: white;
+      border-radius: 16px;
+      padding: 10px 28px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      color: #7e22ce;
+    }
+
+    /* Main white container */
+    .contenedor {
+      background: white;
+      border-radius: 24px;
+      padding: 32px 36px;
+      max-width: 680px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+
+    /* ---- Options view ---- */
+    .opciones-titulo {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #1e1b4b;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .opcion-fila {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #f3e8ff;
+    }
+    .opcion-fila:last-of-type { border-bottom: none; }
+
+    .toggle-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #1e1b4b;
+      cursor: pointer;
+      user-select: none;
+    }
+    .toggle-label input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #a855f7;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .opcion-desc {
+      font-size: 0.88rem;
+      color: #6b7280;
+      padding-left: 30px;
+    }
+
+    .btn-limpiar-historial {
+      align-self: flex-start;
+      padding: 8px 20px;
+      border: 2px solid #d1d5db;
+      border-radius: 50px;
+      background: white;
+      color: #6b7280;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-limpiar-historial:hover {
+      border-color: #ef4444;
+      color: #ef4444;
+      background: #fef2f2;
+    }
+
+    /* ---- In-game word display ---- */
+    .palabra-display-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 180px;
+      margin-bottom: 32px;
+    }
+
+    .badge-fallada {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f3e8ff;
+      color: #7e22ce;
+      border: 2px solid #d8b4fe;
+      border-radius: 50px;
+      padding: 5px 18px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .palabra-grande {
+      font-size: 3.2rem;
+      font-weight: 900;
+      color: #1e1b4b;
+      text-align: center;
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+      animation: aparecer 0.2s ease-out;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---- Buttons ---- */
+    .acciones {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 13px 36px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .btn:hover { transform: scale(1.06); box-shadow: 0 6px 18px rgba(0,0,0,0.2); }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-buena   { background: linear-gradient(135deg, #22c55e, #16a34a); }
+    .btn-mala    { background: linear-gradient(135deg, #ef4444, #dc2626); }
+    .btn-iniciar { background: linear-gradient(135deg, #a855f7, #7e22ce); }
+    .btn-reiniciar { background: linear-gradient(135deg, #f59e0b, #d97706); }
+
+    /* ---- Final results ---- */
+    .final {
+      text-align: center;
+      padding: 20px 0 10px;
+    }
+    .final h2 {
+      font-size: 1.8rem;
+      color: #7e22ce;
+      margin-bottom: 20px;
+    }
+    .final .detalle {
+      font-size: 1rem;
+      color: #6b7280;
+      margin-bottom: 24px;
+    }
+    .final .mensaje {
+      font-size: 1.15rem;
+      color: #333;
+      margin-bottom: 24px;
+      font-weight: 600;
+    }
+
+    .nota-circulo {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-weight: bold;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+      animation: pulso 0.6s;
+    }
+    .nota-circulo .numero { font-size: 3.2rem; line-height: 1; }
+    .nota-circulo .de-cien { font-size: 0.85rem; opacity: 0.85; }
+
+    .nota-excelente { background: linear-gradient(135deg, #22c55e, #16a34a); color: white; }
+    .nota-buena     { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; }
+    .nota-regular   { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; }
+    .nota-baja      { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+
+    @keyframes pulso {
+      0%, 100% { transform: scale(1); }
+      50%      { transform: scale(1.1); }
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 600px) {
+      body { padding: 12px 8px 32px; }
+      h1 { font-size: 1.5rem; }
+      .subtitulo { font-size: 0.9rem; }
+      .info-box { padding: 8px 18px; font-size: 1rem; border-radius: 12px; }
+      .contenedor { padding: 20px 16px; border-radius: 18px; }
+      .palabra-grande { font-size: 2.2rem; }
+      .palabra-display-wrap { min-height: 130px; margin-bottom: 22px; }
+      .btn { padding: 12px 24px; font-size: 1rem; }
+      .btn-buena, .btn-mala { flex: 1; }
+      .nota-circulo { width: 120px; height: 120px; }
+      .nota-circulo .numero { font-size: 2.5rem; }
+      .opcion-desc { padding-left: 0; }
+      .toggle-label { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="volver" href="../index.html">← Inicio</a>
+
+  <h1>🐝 Spelling Bee</h1>
+  <p class="subtitulo">Practica la ortografía · 3° Grado</p>
+
+  <!-- Counter pill (shown only during game) -->
+  <div class="panel-superior" id="panel-superior" style="display:none">
+    <div class="info-box" id="contador-display">Quedan: 67</div>
+  </div>
+
+  <!-- Main container with three sub-views -->
+  <div class="contenedor" id="contenedor">
+
+    <!-- VIEW A: Options (pre-game) -->
+    <div id="vista-opciones">
+      <p class="opciones-titulo">Opciones de práctica</p>
+
+      <div class="opcion-fila">
+        <label class="toggle-label">
+          <input type="checkbox" id="chk-malas-primero">
+          Palabras falladas primero
+        </label>
+        <span class="opcion-desc">Las palabras marcadas como malas aparecen al inicio de la práctica</span>
+      </div>
+
+      <div class="opcion-fila">
+        <button class="btn-limpiar-historial" id="btn-limpiar" onclick="limpiarHistorial()">
+          Limpiar historial de palabras malas
+        </button>
+        <span class="opcion-desc" id="desc-malas">Sin historial de palabras malas</span>
+      </div>
+
+      <div class="acciones" style="margin-top: 8px;">
+        <button class="btn btn-iniciar" onclick="iniciarPractica()">¡Comenzar!</button>
+      </div>
+    </div>
+
+    <!-- VIEW B: In-game word display -->
+    <div id="vista-juego" style="display:none">
+      <div class="palabra-display-wrap">
+        <div class="badge-fallada" id="badge-fallada" style="display:none">⚠ Antes fallada</div>
+        <div class="palabra-grande" id="palabra-grande"></div>
+      </div>
+      <div class="acciones">
+        <button class="btn btn-mala"  onclick="calificar('mala')">✗ Mala</button>
+        <button class="btn btn-buena" onclick="calificar('buena')">✓ Buena</button>
+      </div>
+    </div>
+
+    <!-- VIEW C: End-game results (populated by JS) -->
+    <div id="vista-final" style="display:none"></div>
+
+  </div>
+
+  <script>
+    // ── Configuration ────────────────────────────────────────────────
+    const PRACTICA = {
+      id: 'lista1',
+      archivo: 'palabras.json',
+      fallback: ["Bald","Bathe","Blind","Boat","Bone","Bowl","Break","Bump","Chair","Clay","Coast","Corn","Dirt","Door","Dust","Face","Feet","Few","Field","Five","Four","Fume","Gain","Glue","Goal","Goat","Goose","Hand","Hip","House","July","Leaf","March","Meat","Neck","Nine","One","Pain","Pale","Path","Peanut","Pine","Pink","Plain","Plate","Price","Print","Rash","Roam","Rock","Roof","Scar","Scarf","Shoe","Short","Sink","Soap","Spot","Stream","Tail","Tall","Thin","Three","Two","Under","Yard","Yellow"]
+    };
+
+    // ── State ────────────────────────────────────────────────────────
+    let palabrasCargadas = [];
+    let cola = [];
+    let indiceActual = 0;
+    let buenas = 0;
+    let malas = 0;
+
+    // ── localStorage helpers ─────────────────────────────────────────
+    function storageKey() {
+      return 'spellingbee_malas_' + PRACTICA.id;
+    }
+
+    function getMalas() {
+      try {
+        return JSON.parse(localStorage.getItem(storageKey()) || '[]');
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function setMalas(arr) {
+      try {
+        localStorage.setItem(storageKey(), JSON.stringify(arr));
+      } catch (e) {}
+    }
+
+    function addMala(palabra) {
+      const arr = getMalas();
+      if (!arr.includes(palabra)) {
+        arr.push(palabra);
+        setMalas(arr);
+      }
+    }
+
+    function removeMala(palabra) {
+      setMalas(getMalas().filter(p => p !== palabra));
+    }
+
+    function clearMalas() {
+      try { localStorage.removeItem(storageKey()); } catch (e) {}
+    }
+
+    // ── Shuffle (Fisher-Yates in-place) ──────────────────────────────
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // ── Build ordered word list for session ──────────────────────────
+    function buildCola() {
+      const malaSet = new Set(getMalas());
+      const grupoMalas = palabrasCargadas.filter(p => malaSet.has(p));
+      const grupoResto = palabrasCargadas.filter(p => !malaSet.has(p));
+      shuffle(grupoMalas);
+      shuffle(grupoResto);
+      const badFirst = document.getElementById('chk-malas-primero').checked;
+      return badFirst
+        ? [...grupoMalas, ...grupoResto]
+        : shuffle([...grupoMalas, ...grupoResto]);
+    }
+
+    // ── View transitions ─────────────────────────────────────────────
+    function mostrarVistaOpciones() {
+      document.getElementById('vista-juego').style.display = 'none';
+      document.getElementById('vista-final').style.display = 'none';
+      document.getElementById('vista-opciones').style.display = 'block';
+      document.getElementById('panel-superior').style.display = 'none';
+      actualizarDescMalas();
+    }
+
+    function actualizarDescMalas() {
+      const n = getMalas().length;
+      document.getElementById('desc-malas').textContent = n === 0
+        ? 'Sin historial de palabras malas'
+        : n === 1
+          ? '1 palabra marcada como mala'
+          : n + ' palabras marcadas como malas';
+    }
+
+    // ── History clear ────────────────────────────────────────────────
+    function limpiarHistorial() {
+      const n = getMalas().length;
+      if (n === 0) {
+        alert('No hay historial que limpiar.');
+        return;
+      }
+      const ok = confirm('¿Limpiar el historial de ' + n + (n === 1 ? ' palabra mala?' : ' palabras malas?'));
+      if (ok) {
+        clearMalas();
+        actualizarDescMalas();
+      }
+    }
+
+    // ── Load word list ───────────────────────────────────────────────
+    async function cargarPractica() {
+      try {
+        const resp = await fetch(PRACTICA.archivo);
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        palabrasCargadas = await resp.json();
+      } catch (e) {
+        palabrasCargadas = PRACTICA.fallback.slice();
+      }
+      mostrarVistaOpciones();
+    }
+
+    // ── Start session ────────────────────────────────────────────────
+    function iniciarPractica() {
+      cola = buildCola();
+      indiceActual = 0;
+      buenas = 0;
+      malas = 0;
+
+      document.getElementById('vista-opciones').style.display = 'none';
+      document.getElementById('vista-final').style.display = 'none';
+      document.getElementById('vista-juego').style.display = 'block';
+      document.getElementById('panel-superior').style.display = 'flex';
+
+      mostrarPalabraActual();
+    }
+
+    // ── Display current word ─────────────────────────────────────────
+    function mostrarPalabraActual() {
+      const palabra = cola[indiceActual];
+      const esMala = getMalas().includes(palabra);
+
+      document.getElementById('palabra-grande').textContent = palabra;
+      document.getElementById('badge-fallada').style.display = esMala ? 'inline-flex' : 'none';
+
+      const quedan = cola.length - indiceActual;
+      document.getElementById('contador-display').textContent = 'Quedan: ' + quedan;
+    }
+
+    // ── Grade current word ───────────────────────────────────────────
+    function calificar(tipo) {
+      const palabra = cola[indiceActual];
+      if (tipo === 'buena') {
+        buenas++;
+        removeMala(palabra);
+      } else {
+        malas++;
+        addMala(palabra);
+      }
+      indiceActual++;
+      if (indiceActual >= cola.length) {
+        mostrarFinal();
+      } else {
+        mostrarPalabraActual();
+      }
+    }
+
+    // ── Final results screen ─────────────────────────────────────────
+    function mostrarFinal() {
+      document.getElementById('vista-juego').style.display = 'none';
+      document.getElementById('panel-superior').style.display = 'none';
+
+      const total = cola.length;
+      const porcentaje = total > 0 ? Math.round((buenas / total) * 100) : 0;
+
+      let mensaje, claseNota;
+      if (porcentaje >= 90) {
+        mensaje = '¡Excelente! ¡Eres un campeón de la ortografía!';
+        claseNota = 'nota-excelente';
+      } else if (porcentaje >= 70) {
+        mensaje = '¡Muy bien! Sigue practicando.';
+        claseNota = 'nota-buena';
+      } else if (porcentaje >= 50) {
+        mensaje = '¡Bien! Repasa las palabras difíciles.';
+        claseNota = 'nota-regular';
+      } else {
+        mensaje = '¡Buen intento! Practica más y mejorarás.';
+        claseNota = 'nota-baja';
+      }
+
+      const vistaFinal = document.getElementById('vista-final');
+      vistaFinal.innerHTML =
+        '<div class="final">' +
+          '<h2>¡Terminaste!</h2>' +
+          '<div class="nota-circulo ' + claseNota + '">' +
+            '<span class="numero">' + porcentaje + '</span>' +
+            '<span class="de-cien">de 100</span>' +
+          '</div>' +
+          '<p class="mensaje">' + mensaje + '</p>' +
+          '<p class="detalle">Buenas: ' + buenas + ' &nbsp;·&nbsp; Malas: ' + malas + ' &nbsp;·&nbsp; Total: ' + total + '</p>' +
+          '<div class="acciones" style="margin-top:24px;">' +
+            '<button class="btn btn-reiniciar" onclick="mostrarVistaOpciones()">Volver a opciones</button>' +
+            '<button class="btn btn-iniciar"   onclick="iniciarPractica()">Repetir práctica</button>' +
+          '</div>' +
+        '</div>';
+
+      vistaFinal.style.display = 'block';
+    }
+
+    // ── Boot ─────────────────────────────────────────────────────────
+    cargarPractica();
+  </script>
+</body>
+</html>
