@@ -26,7 +26,7 @@
 
   {"pregunta": "¿En qué fecha exacta ocurrió la Batalla de Santa Rosa?", "opciones": ["11 de abril de 1856", "25 de julio de 1824", "20 de marzo de 1856", "1° de enero de 1857"], "correcta": 2},
   {"pregunta": "¿Dónde se libró la Batalla de Santa Rosa?", "opciones": ["En Alajuela", "En San José", "En Puntarenas", "En la Hacienda Santa Rosa, Guanacaste"], "correcta": 3},
-  {"pregunta": "¿Cuánto tiempo duró el combate en la Batalla de Santa Rosa?", "opciones": ["Dos horas", "Un día entero", "Cinco minutos", "Tres días"], "correcta": 2},
+  {"pregunta": "¿Cuánto tiempo duró el combate en la Batalla de Santa Rosa?", "opciones": ["Más de una hora", "Menos de 20 minutos", "Tres días", "Un día entero"], "correcta": 1},
   {"pregunta": "¿Quién lideraba a los filibusteros que atacaron Costa Rica?", "opciones": ["Juan Santamaría", "José María Cañas", "William Walker", "Juan Rafael Mora"], "correcta": 2},
   {"pregunta": "¿Qué presidente costarricense llamó al pueblo a las armas para defender la patria?", "opciones": ["Óscar Arias Sánchez", "Juan Vázquez de Coronado", "José María Cañas", "Juan Rafael \"Juanito\" Mora Porras"], "correcta": 3},
 
