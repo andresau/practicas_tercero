@@ -22,7 +22,7 @@
   {"pregunta": "¿Cuándo se realiza la Romería en Cartago?", "opciones": ["El 11 de abril", "El 25 de julio", "El 20 de marzo", "El 2 de agosto"], "correcta": 3},
   {"pregunta": "¿En qué cantón de Heredia se celebran las famosas Mascaradas?", "opciones": ["San Joaquín de Flores", "Barva", "Santo Domingo", "Sarapiquí"], "correcta": 1},
 
-  {"pregunta": "¿Qué es una efeméride?", "opciones": ["Una fiesta de cumpleaños", "Una celebración patria de Costa Rica", "Un libro de historia", "Una canción nacional"], "correcta": 1},
+  {"pregunta": "¿Qué es una efeméride?", "opciones": ["Una fiesta de cumpleaños", "Fechas de fiestas patrias por hechos históricos nacionales", "Un libro de historia", "Una canción nacional"], "correcta": 1},
 
   {"pregunta": "¿En qué fecha exacta ocurrió la Batalla de Santa Rosa?", "opciones": ["11 de abril de 1856", "25 de julio de 1824", "20 de marzo de 1856", "1° de enero de 1857"], "correcta": 2},
   {"pregunta": "¿Dónde se libró la Batalla de Santa Rosa?", "opciones": ["En Alajuela", "En San José", "En Puntarenas", "En la Hacienda Santa Rosa, Guanacaste"], "correcta": 3},
@@ -55,7 +55,7 @@
   {"pregunta": "¿Cuál es la principal tradición religiosa de Puntarenas?", "opciones": ["La Romería", "Las Mascaradas", "La Fiesta de la Virgen del Mar", "El Festival de la Luz"], "correcta": 2},
   {"pregunta": "¿En qué mes se celebran los Carnavales de Puntarenas?", "opciones": ["Octubre", "Diciembre", "Julio", "Febrero"], "correcta": 3},
 
-  {"pregunta": "¿Cuál de estas opciones describe mejor una efeméride?", "opciones": ["Un deporte nacional", "Una fecha importante que se conmemora cada año", "Un personaje histórico famoso", "Un lugar turístico del país"], "correcta": 1},
+  {"pregunta": "¿Cuál de estas opciones describe mejor una efeméride?", "opciones": ["Un deporte nacional", "Fechas de fiestas patrias por hechos históricos nacionales", "Un personaje histórico famoso", "Un lugar turístico del país"], "correcta": 1},
 
   {"pregunta": "¿En qué fecha exacta ocurrió la Batalla de Rivas?", "opciones": ["20 de marzo de 1856", "11 de abril de 1856", "25 de julio de 1824", "1° de abril de 1856"], "correcta": 1},
   {"pregunta": "¿En qué país se libró la Batalla de Rivas?", "opciones": ["Costa Rica", "Panamá", "Honduras", "Nicaragua"], "correcta": 3},
