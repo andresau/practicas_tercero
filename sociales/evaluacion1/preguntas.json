@@ -115,7 +115,7 @@
   {"pregunta": "¿En qué número de viaje llegó Cristóbal Colón a las costas de Limón?", "opciones": ["En su primer viaje", "En su segundo viaje", "En su tercer viaje", "En su cuarto viaje"], "correcta": 3},
 
   {"pregunta": "¿Qué comidas típicas de Guanacaste están hechas a base de maíz?", "opciones": ["El rice and beans y el paty", "El vigorón y los Churchills", "Las chorreadas, los tamales y el tamal asado", "Los patacones y el ceviche"], "correcta": 2},
-  {"pregunta": "¿En qué cantón de Heredia se realizan procesiones religiosas en vivo durante Semana Santa?", "opciones": ["Barva", "Heredia Centro", "San Joaquín de Flores", "Santo Domingo"], "correcta": 2},
+  {"pregunta": "¿En qué provincia se realizan procesiones religiosas con representaciones en vivo?", "opciones": ["San José", "Heredia", "Cartago", "Alajuela"], "correcta": 1},
   {"pregunta": "¿Por qué se celebra la Romería el 2 de agosto?", "opciones": ["Para recordar la Batalla de Santa Rosa", "Para conmemorar el día de la Virgen de los Ángeles (La Negrita)", "Para celebrar la Anexión de Nicoya", "Para recordar la fundación de Cartago"], "correcta": 1},
   {"pregunta": "¿Qué tipo de tradición son las fiestas taurinas en Guanacaste?", "opciones": ["Una tradición religiosa", "Una tradición gastronómica", "Una tradición cultural típica", "Una tradición deportiva internacional"], "correcta": 2},
 
