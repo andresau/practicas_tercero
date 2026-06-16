@@ -6,7 +6,7 @@
   {"pregunta": "¿Cuántas provincias de Costa Rica se ubican completamente fuera del Valle Central?", "opciones": ["Dos", "Tres", "Cuatro", "Cinco"], "correcta": 1},
 
   {"pregunta": "¿Cuál era el nombre de San José en la época colonial?", "opciones": ["La Ciudad de las Flores", "La Vieja Metrópoli", "Villa Nueva de la Boca del Monte", "Tierra de Mangos y Héroes"], "correcta": 2},
-  {"pregunta": "¿Cómo se conoce a la provincia de Alajuela?", "opciones": ["La Ciudad de las Flores", "La Vieja Metrópoli", "Tierra de Mangos y Héroes", "La Perla del Pacífico"], "correcta": 2},
+  {"pregunta": "¿Cómo se conoce a la provincia de Alajuela?", "opciones": ["La Ciudad de las Flores", "La Vieja Metrópoli", "La Ciudad de los Mangos", "La Perla del Pacífico"], "correcta": 2},
   {"pregunta": "¿Cómo se conoce a la provincia de Heredia?", "opciones": ["La Perla del Pacífico", "Tierra de la Anexión", "La Ciudad de las Flores", "La Vieja Metrópoli"], "correcta": 2},
   {"pregunta": "¿Cómo se conoce a la provincia de Cartago?", "opciones": ["La Ciudad de las Flores", "La Perla del Pacífico", "La Vieja Metrópoli o la Antigua Capital", "Tierra de la Anexión"], "correcta": 2},
   {"pregunta": "¿Cómo se le conoce a la ciudad de Liberia, en Guanacaste?", "opciones": ["La Ciudad Blanca", "La Perla del Pacífico", "La Ciudad de los Mangos", "La Ciudad de las Flores"], "correcta": 0},
