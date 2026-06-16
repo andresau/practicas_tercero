@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estudios Sociales — Prueba I Semestre</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 40px;
+    }
+
+    .volver {
+      align-self: flex-start;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #713f12;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      transition: opacity 0.2s;
+    }
+    .volver:hover { opacity: 0.7; }
+
+    /* ===== PANTALLA: SELECTOR DE VERSIÓN ===== */
+    #pantalla-inicio {
+      width: 100%;
+      max-width: 640px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .titulo-prueba {
+      text-align: center;
+    }
+    .titulo-prueba .icono { font-size: 3.5rem; margin-bottom: 10px; }
+    .titulo-prueba h1 {
+      color: #713f12;
+      font-size: 2rem;
+      text-shadow: 1px 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 6px;
+    }
+    .titulo-prueba p { color: #92400e; font-size: 1rem; }
+
+    .instrucciones {
+      background: white;
+      border-radius: 16px;
+      padding: 20px 24px;
+      width: 100%;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    .instrucciones h2 { color: #713f12; font-size: 1.05rem; margin-bottom: 10px; }
+    .instrucciones ul { padding-left: 20px; color: #57534e; font-size: 0.95rem; line-height: 1.8; }
+
+    .selector-version h2 {
+      color: #713f12;
+      font-size: 1.2rem;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .versiones-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      width: 100%;
+    }
+
+    .btn-version {
+      border: none;
+      border-radius: 20px;
+      padding: 28px 20px;
+      cursor: pointer;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-version:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(0,0,0,0.25); }
+    .btn-version span.letra { font-size: 2.8rem; }
+    .btn-version span.sub { font-size: 0.85rem; font-weight: 600; opacity: 0.9; }
+
+    .btn-version.va { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+    .btn-version.vb { background: linear-gradient(135deg, #22c55e, #15803d); }
+    .btn-version.vc { background: linear-gradient(135deg, #f97316, #c2410c); }
+    .btn-version.vd { background: linear-gradient(135deg, #a855f7, #7e22ce); }
+
+    /* ===== PANTALLA: PREGUNTA ===== */
+    #pantalla-quiz {
+      display: none;
+      width: 100%;
+      max-width: 640px;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .barra-progreso-wrap {
+      background: rgba(255,255,255,0.5);
+      border-radius: 50px;
+      height: 10px;
+      width: 100%;
+      overflow: hidden;
+    }
+    .barra-progreso-fill {
+      height: 100%;
+      background: #713f12;
+      border-radius: 50px;
+      transition: width 0.4s ease;
+    }
+
+    .info-pregunta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #713f12;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .tarjeta-pregunta {
+      background: white;
+      border-radius: 20px;
+      padding: 28px 24px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+    }
+
+    .badge-version {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: bold;
+      padding: 3px 12px;
+      border-radius: 50px;
+      color: white;
+      margin-bottom: 14px;
+    }
+    .badge-v.va { background: #3b82f6; }
+    .badge-v.vb { background: #22c55e; }
+    .badge-v.vc { background: #f97316; }
+    .badge-v.vd { background: #a855f7; }
+
+    .texto-pregunta {
+      font-size: 1.15rem;
+      color: #1c1917;
+      line-height: 1.5;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .opciones {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-opcion {
+      border: 2px solid #e7e5e4;
+      border-radius: 12px;
+      padding: 14px 18px;
+      text-align: left;
+      background: white;
+      cursor: pointer;
+      font-size: 1rem;
+      color: #292524;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+      line-height: 1.4;
+    }
+    .btn-opcion:hover:not(:disabled) {
+      background: #fef9c3;
+      border-color: #eab308;
+      transform: translateX(4px);
+    }
+    .btn-opcion .letra-opcion {
+      min-width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #f5f5f4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.9rem;
+      color: #57534e;
+      flex-shrink: 0;
+    }
+
+    .btn-opcion.correcta {
+      background: #dcfce7;
+      border-color: #22c55e;
+    }
+    .btn-opcion.correcta .letra-opcion { background: #22c55e; color: white; }
+
+    .btn-opcion.incorrecta {
+      background: #fee2e2;
+      border-color: #ef4444;
+    }
+    .btn-opcion.incorrecta .letra-opcion { background: #ef4444; color: white; }
+
+    .btn-opcion:disabled { cursor: default; transform: none; }
+
+    .feedback {
+      display: none;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    .feedback.ok { background: #dcfce7; color: #15803d; display: block; }
+    .feedback.mal { background: #fee2e2; color: #b91c1c; display: block; }
+
+    .btn-siguiente {
+      display: none;
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      background: #713f12;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-siguiente:hover { background: #92400e; transform: translateY(-2px); }
+
+    /* ===== PANTALLA: RESULTADOS ===== */
+    #pantalla-resultado {
+      display: none;
+      width: 100%;
+      max-width: 540px;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .tarjeta-resultado {
+      background: white;
+      border-radius: 24px;
+      padding: 36px 28px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      width: 100%;
+    }
+
+    .circulo-nota {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: white;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .circulo-nota .nota-pct { font-size: 1rem; font-weight: 600; margin-top: -4px; }
+
+    .nivel-excelente { background: linear-gradient(135deg, #22c55e, #15803d); }
+    .nivel-bien      { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+    .nivel-regular   { background: linear-gradient(135deg, #f97316, #c2410c); }
+    .nivel-bajo      { background: linear-gradient(135deg, #ef4444, #991b1b); }
+
+    .resultado-titulo { font-size: 1.5rem; font-weight: 900; color: #292524; margin-bottom: 8px; }
+    .resultado-sub { font-size: 1rem; color: #57534e; margin-bottom: 20px; }
+
+    .detalle-respuestas {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    .detalle-item { text-align: center; }
+    .detalle-num { font-size: 1.8rem; font-weight: 900; }
+    .detalle-num.verde { color: #22c55e; }
+    .detalle-num.rojo  { color: #ef4444; }
+    .detalle-lbl { font-size: 0.82rem; color: #78716c; }
+
+    .botones-resultado {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn-resultado {
+      padding: 13px 24px;
+      border-radius: 12px;
+      border: none;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    .btn-resultado:hover { transform: translateY(-2px); opacity: 0.9; }
+    .btn-reintentar { background: #713f12; color: white; }
+    .btn-otra-version { background: #fef3c7; color: #713f12; border: 2px solid #eab308; }
+
+    @media (max-width: 500px) {
+      .titulo-prueba h1 { font-size: 1.5rem; }
+      .versiones-grid { gap: 10px; }
+      .btn-version { padding: 20px 14px; }
+      .btn-version span.letra { font-size: 2.2rem; }
+      .tarjeta-pregunta { padding: 20px 16px; }
+      .texto-pregunta { font-size: 1rem; }
+      .btn-opcion { font-size: 0.92rem; padding: 12px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="volver" href="../index.html">← Sociales</a>
+
+  <!-- ======== PANTALLA INICIO ======== -->
+  <div id="pantalla-inicio">
+    <div class="titulo-prueba">
+      <div class="icono">🌍</div>
+      <h1>Estudios Sociales</h1>
+      <p>Prueba — I Semestre · 3° Grado</p>
+    </div>
+
+    <div class="instrucciones">
+      <h2>📋 Instrucciones</h2>
+      <ul>
+        <li>Elige una versión de la prueba (A, B, C o D).</li>
+        <li>Cada versión tiene <strong>25 preguntas</strong> diferentes.</li>
+        <li>Lee bien cada pregunta y selecciona la respuesta correcta.</li>
+        <li>Al terminar verás tu calificación.</li>
+      </ul>
+    </div>
+
+    <div class="selector-version" style="width:100%">
+      <h2>¿Qué versión vas a hacer?</h2>
+      <div class="versiones-grid">
+        <button class="btn-version va" onclick="iniciarVersion(0)">
+          <span class="letra">A</span>
+          <span class="sub">Versión A</span>
+        </button>
+        <button class="btn-version vb" onclick="iniciarVersion(1)">
+          <span class="letra">B</span>
+          <span class="sub">Versión B</span>
+        </button>
+        <button class="btn-version vc" onclick="iniciarVersion(2)">
+          <span class="letra">C</span>
+          <span class="sub">Versión C</span>
+        </button>
+        <button class="btn-version vd" onclick="iniciarVersion(3)">
+          <span class="letra">D</span>
+          <span class="sub">Versión D</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== PANTALLA QUIZ ======== -->
+  <div id="pantalla-quiz">
+    <div class="info-pregunta">
+      <span id="contador-texto">Pregunta 1 de 25</span>
+      <span id="puntaje-texto">✔ 0 correctas</span>
+    </div>
+    <div class="barra-progreso-wrap">
+      <div class="barra-progreso-fill" id="barra-fill" style="width:0%"></div>
+    </div>
+
+    <div class="tarjeta-pregunta">
+      <div class="badge-version" id="badge-v"></div>
+      <div class="texto-pregunta" id="texto-pregunta"></div>
+      <div class="opciones" id="contenedor-opciones"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+
+    <button class="btn-siguiente" id="btn-siguiente" onclick="siguientePregunta()">
+      Siguiente pregunta →
+    </button>
+  </div>
+
+  <!-- ======== PANTALLA RESULTADO ======== -->
+  <div id="pantalla-resultado">
+    <div class="tarjeta-resultado">
+      <div class="circulo-nota" id="circulo-nota">
+        <span id="nota-num"></span>
+        <span class="nota-pct" id="nota-pct"></span>
+      </div>
+      <div class="resultado-titulo" id="resultado-titulo"></div>
+      <div class="resultado-sub" id="resultado-sub"></div>
+
+      <div class="detalle-respuestas">
+        <div class="detalle-item">
+          <div class="detalle-num verde" id="total-correctas">0</div>
+          <div class="detalle-lbl">Correctas</div>
+        </div>
+        <div class="detalle-item">
+          <div class="detalle-num rojo" id="total-incorrectas">0</div>
+          <div class="detalle-lbl">Incorrectas</div>
+        </div>
+        <div class="detalle-item">
+          <div class="detalle-num" style="color:#eab308" id="total-total">25</div>
+          <div class="detalle-lbl">Total</div>
+        </div>
+      </div>
+
+      <div class="botones-resultado">
+        <button class="btn-resultado btn-reintentar" onclick="reintentar()">Repetir esta versión</button>
+        <button class="btn-resultado btn-otra-version" onclick="volverInicio()">Elegir otra versión</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const PREGUNTAS_POR_VERSION = 25;
+  const LETRAS = ['A', 'B', 'C', 'D'];
+  const CLASES_VERSION = ['va', 'vb', 'vc', 'vd'];
+  const NOMBRES_VERSION = ['Versión A', 'Versión B', 'Versión C', 'Versión D'];
+
+  let todasLasPreguntas = [];
+  let preguntasActuales = [];
+  let versionActual = -1;
+  let indiceActual = 0;
+  let aciertos = 0;
+  let respondida = false;
+
+  // Cargar preguntas al inicio
+  fetch('preguntas.json')
+    .then(r => r.json())
+    .then(data => { todasLasPreguntas = data; })
+    .catch(() => { todasLasPreguntas = FALLBACK; });
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function iniciarVersion(v) {
+    versionActual = v;
+    const inicio = v * PREGUNTAS_POR_VERSION;
+    const fin = inicio + PREGUNTAS_POR_VERSION;
+    // Tomar el bloque de 25 y mezclarlas
+    const bloque = todasLasPreguntas.slice(inicio, fin);
+    preguntasActuales = shuffle(bloque);
+    indiceActual = 0;
+    aciertos = 0;
+
+    document.getElementById('pantalla-inicio').style.display = 'none';
+    document.getElementById('pantalla-quiz').style.display = 'flex';
+    document.getElementById('pantalla-resultado').style.display = 'none';
+
+    mostrarPregunta();
+  }
+
+  function mostrarPregunta() {
+    respondida = false;
+    const q = preguntasActuales[indiceActual];
+    const total = preguntasActuales.length;
+
+    // Progreso
+    document.getElementById('contador-texto').textContent =
+      `Pregunta ${indiceActual + 1} de ${total}`;
+    document.getElementById('puntaje-texto').textContent =
+      `✔ ${aciertos} correcta${aciertos !== 1 ? 's' : ''}`;
+    document.getElementById('barra-fill').style.width =
+      `${(indiceActual / total) * 100}%`;
+
+    // Badge versión
+    const badge = document.getElementById('badge-v');
+    badge.textContent = NOMBRES_VERSION[versionActual];
+    badge.className = `badge-version badge-v ${CLASES_VERSION[versionActual]}`;
+
+    // Pregunta
+    document.getElementById('texto-pregunta').textContent = q.pregunta;
+
+    // Mezclar opciones
+    const indices = shuffle([0, 1, 2, 3]);
+    const nuevaCorrecta = indices.indexOf(q.correcta);
+
+    const contenedor = document.getElementById('contenedor-opciones');
+    contenedor.innerHTML = '';
+    indices.forEach((idxOriginal, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'btn-opcion';
+      btn.dataset.indiceOriginal = idxOriginal;
+      btn.dataset.esCorrecto = (idxOriginal === q.correcta) ? '1' : '0';
+      btn.innerHTML = `<span class="letra-opcion">${LETRAS[i]}</span>${q.opciones[idxOriginal]}`;
+      btn.onclick = () => seleccionarOpcion(btn, idxOriginal === q.correcta);
+      contenedor.appendChild(btn);
+    });
+
+    // Reset feedback y botón
+    const fb = document.getElementById('feedback');
+    fb.className = 'feedback';
+    fb.textContent = '';
+    document.getElementById('btn-siguiente').style.display = 'none';
+  }
+
+  function seleccionarOpcion(btnSeleccionado, esCorrecto) {
+    if (respondida) return;
+    respondida = true;
+
+    // Deshabilitar todos
+    document.querySelectorAll('.btn-opcion').forEach(b => {
+      b.disabled = true;
+      if (b.dataset.esCorrecto === '1') b.classList.add('correcta');
+    });
+
+    const fb = document.getElementById('feedback');
+    if (esCorrecto) {
+      aciertos++;
+      btnSeleccionado.classList.add('correcta');
+      fb.textContent = '¡Correcto! 🎉';
+      fb.className = 'feedback ok';
+    } else {
+      btnSeleccionado.classList.add('incorrecta');
+      fb.textContent = '¡Incorrecto! Observa la respuesta correcta marcada en verde.';
+      fb.className = 'feedback mal';
+    }
+
+    document.getElementById('puntaje-texto').textContent =
+      `✔ ${aciertos} correcta${aciertos !== 1 ? 's' : ''}`;
+
+    const btnSig = document.getElementById('btn-siguiente');
+    if (indiceActual + 1 < preguntasActuales.length) {
+      btnSig.textContent = 'Siguiente pregunta →';
+    } else {
+      btnSig.textContent = 'Ver resultados →';
+    }
+    btnSig.style.display = 'block';
+  }
+
+  function siguientePregunta() {
+    indiceActual++;
+    if (indiceActual < preguntasActuales.length) {
+      mostrarPregunta();
+    } else {
+      mostrarResultado();
+    }
+  }
+
+  function mostrarResultado() {
+    document.getElementById('pantalla-quiz').style.display = 'none';
+    document.getElementById('pantalla-resultado').style.display = 'flex';
+
+    const total = preguntasActuales.length;
+    const incorrectas = total - aciertos;
+    const pct = Math.round((aciertos / total) * 100);
+
+    // Nota y nivel
+    document.getElementById('nota-num').textContent = `${aciertos}/${total}`;
+    document.getElementById('nota-pct').textContent = `${pct}%`;
+
+    const circulo = document.getElementById('circulo-nota');
+    let nivel, titulo, sub;
+    if (pct >= 90) {
+      nivel = 'nivel-excelente';
+      titulo = '¡Excelente! 🏆';
+      sub = '¡Conoces muy bien los Estudios Sociales!';
+    } else if (pct >= 70) {
+      nivel = 'nivel-bien';
+      titulo = '¡Muy bien! 👏';
+      sub = 'Tienes un buen dominio del tema. ¡Sigue así!';
+    } else if (pct >= 50) {
+      nivel = 'nivel-regular';
+      titulo = 'Puedes mejorar 💪';
+      sub = 'Repasa el material y vuelve a intentarlo.';
+    } else {
+      nivel = 'nivel-bajo';
+      titulo = 'Necesitas repasar 📚';
+      sub = 'Estudia bien el tema y vuelve a intentarlo.';
+    }
+
+    circulo.className = `circulo-nota ${nivel}`;
+    document.getElementById('resultado-titulo').textContent = titulo;
+    document.getElementById('resultado-sub').textContent = sub;
+    document.getElementById('total-correctas').textContent = aciertos;
+    document.getElementById('total-incorrectas').textContent = incorrectas;
+    document.getElementById('total-total').textContent = total;
+  }
+
+  function reintentar() {
+    iniciarVersion(versionActual);
+  }
+
+  function volverInicio() {
+    document.getElementById('pantalla-inicio').style.display = 'flex';
+    document.getElementById('pantalla-quiz').style.display = 'none';
+    document.getElementById('pantalla-resultado').style.display = 'none';
+  }
+
+  // Fallback si fetch falla
+  const FALLBACK = [];
+</script>
+
+</body>
+</html>
