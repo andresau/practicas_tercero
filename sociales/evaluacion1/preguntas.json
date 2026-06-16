@@ -122,7 +122,6 @@
 
   {"pregunta": "Las efemérides son celebraciones patrias que sirven para...", "opciones": ["Aprender matemáticas y ciencias", "Conocer mejor a Costa Rica y recordar su historia", "Practicar deportes nacionales", "Aprender idiomas extranjeros"], "correcta": 1},
 
-  {"pregunta": "¿Por qué los costarricenses ganaron tan rápido en la Batalla de Santa Rosa?", "opciones": ["Porque tenían más soldados", "Porque el coronel filibustero olvidó resguardar la retaguardia", "Porque tenían mejores armas", "Porque llovía mucho ese día"], "correcta": 1},
   {"pregunta": "¿Qué hizo William Walker para contaminar el agua tras la Batalla de Rivas?", "opciones": ["Envenenó los ríos", "Destruyó los acueductos", "Tiró cuerpos de fallecidos a los pozos de agua", "Quemó las fuentes de agua"], "correcta": 2},
   {"pregunta": "¿Qué reconocimiento recibió Pancha Carrasco por su valentía en la batalla?", "opciones": ["Un título de general", "Una medalla de honor", "Una pensión del gobierno", "Un monumento en su honor"], "correcta": 1},
   {"pregunta": "¿Cuál fue el primer enfrentamiento de la Campaña Nacional de 1856?", "opciones": ["La Batalla de Rivas", "La Batalla de Santa Rosa", "La Toma de Nicaragua", "La Batalla de Liberia"], "correcta": 1},
