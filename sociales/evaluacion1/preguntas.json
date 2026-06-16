@@ -48,7 +48,6 @@
   {"pregunta": "¿Qué pueblos indígenas viven en las zonas montañosas de Talamanca, en Limón?", "opciones": ["Los huetares y los votos", "Los chorotegas y los huetares", "Los bribri y los cabécar", "Los guatusos y los chorotegas"], "correcta": 2},
   {"pregunta": "¿Quién dirigió la construcción del Ferrocarril al Atlántico en Limón?", "opciones": ["Juan Santamaría", "William Walker", "Minor Keith", "Óscar Arias"], "correcta": 2},
   {"pregunta": "¿En qué año llegó Cristóbal Colón a las costas de Cariari, hoy Limón?", "opciones": ["1492", "1502", "1563", "1782"], "correcta": 1},
-  {"pregunta": "¿Cuándo se declaró Limón como la séptima provincia de Costa Rica?", "opciones": ["1852", "1870", "1900", "1909"], "correcta": 3},
 
   {"pregunta": "¿Cuál es el instrumento musical típico de Guanacaste?", "opciones": ["La guitarra", "El acordeón", "La marimba", "El violín"], "correcta": 2},
   {"pregunta": "¿Cuál es el baile nacional de Costa Rica?", "opciones": ["La cumbia", "El merengue", "El Punto Guanacasteco", "La salsa"], "correcta": 2},
@@ -78,8 +77,6 @@
   {"pregunta": "¿Por qué Alajuela se conoce como la \"Tierra de Mangos y Héroes\"?", "opciones": ["Por sus grandes cantidades de mango y sus héroes históricos", "Por sus frutas tropicales y sus artesanías", "Por su clima tropical y su historia colonial", "Por sus volcanes y sus personajes históricos"], "correcta": 0},
 
   {"pregunta": "¿Qué pueblo indígena habitaba originalmente la región de Heredia?", "opciones": ["Los chorotegas", "Los bribri", "Los huetares (los votos)", "Los cabécar"], "correcta": 2},
-  {"pregunta": "¿En qué año fue construida la Iglesia de Orosí en Cartago?", "opciones": ["1563", "1706", "1743", "1752"], "correcta": 2},
-  {"pregunta": "¿En qué año se inició la construcción del Ferrocarril al Atlántico?", "opciones": ["1852", "1870", "1885", "1909"], "correcta": 1},
   {"pregunta": "¿Por qué llegaron los afrodescendientes a la provincia de Limón?", "opciones": ["Para cultivar banano", "Para trabajar en la construcción del ferrocarril", "Para establecer comercio marítimo", "Para fundar nuevas ciudades"], "correcta": 1},
 
   {"pregunta": "¿En qué mes se celebran los Carnavales del Caribe en Limón?", "opciones": ["Febrero", "Julio", "Agosto", "Octubre"], "correcta": 3},
@@ -109,7 +106,6 @@
   {"pregunta": "¿En qué año recibió el Dr. Óscar Arias el Premio Nobel de la Paz?", "opciones": ["1975", "1987", "1990", "2000"], "correcta": 1},
 
   {"pregunta": "¿Qué pueblo indígena habitaba originalmente la región de Alajuela?", "opciones": ["Los chorotegas y bribri", "Los huetares, votos y guatusos", "Los bribri y cabécar", "Los chorotegas y huetares"], "correcta": 1},
-  {"pregunta": "¿En qué año se fundó la Casa de Enseñanza de Santo Tomás en San José?", "opciones": ["1748", "1790", "1814", "1848"], "correcta": 2},
   {"pregunta": "¿Cuál fue la primera ciudad capital de Costa Rica durante la época colonial?", "opciones": ["San José", "Alajuela", "Heredia", "Cartago"], "correcta": 3},
   {"pregunta": "¿En qué año se dio la Anexión del Partido de Nicoya a Costa Rica?", "opciones": ["1821", "1823", "1824", "1848"], "correcta": 2},
   {"pregunta": "¿En qué número de viaje llegó Cristóbal Colón a las costas de Limón?", "opciones": ["En su primer viaje", "En su segundo viaje", "En su tercer viaje", "En su cuarto viaje"], "correcta": 3},
