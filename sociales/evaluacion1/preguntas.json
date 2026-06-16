@@ -97,7 +97,6 @@
 
   {"pregunta": "¿Cómo contribuyen las efemérides al fortalecimiento de la identidad nacional?", "opciones": ["Promoviendo el comercio y la economía", "Recordando fechas históricas importantes que nos unen como nación", "Enseñando idiomas extranjeros a los estudiantes", "Organizando competencias deportivas entre provincias"], "correcta": 1},
 
-  {"pregunta": "¿En qué sector del Valle Central están ubicadas las cuatro provincias del Valle Central?", "opciones": ["En el sector oriental", "En el sector occidental", "En el sector norte", "En el sector sur"], "correcta": 1},
   {"pregunta": "Alajuela, San José, Heredia y Cartago pertenecen al grupo de provincias...", "opciones": ["Fuera del Valle Central", "Costeras del Pacífico", "Del Valle Central", "Costeras del Caribe"], "correcta": 2},
 
   {"pregunta": "¿Cuáles son las provincias costeras de Costa Rica que están fuera del Valle Central?", "opciones": ["San José y Cartago", "Alajuela y Heredia", "Guanacaste, Puntarenas y Limón", "Cartago, Limón y Heredia"], "correcta": 2},
