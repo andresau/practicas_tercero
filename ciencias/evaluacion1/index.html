@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Science — III Evaluation Practice</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #dcfce7 0%, #86efac 50%, #22c55e 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 16px 48px;
+    }
+
+    .volver {
+      align-self: flex-start;
+      color: #14532d;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity 0.2s;
+    }
+    .volver:hover { opacity: 0.7; }
+
+    /* ========== START SCREEN ========== */
+    #pantalla-inicio {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .titulo-prueba { text-align: center; }
+    .titulo-prueba .icono { font-size: 3.5rem; margin-bottom: 10px; }
+    .titulo-prueba h1 {
+      color: #14532d;
+      font-size: 2rem;
+      text-shadow: 1px 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 6px;
+    }
+    .titulo-prueba p { color: #166534; font-size: 1rem; }
+
+    .instrucciones {
+      background: white;
+      border-radius: 16px;
+      padding: 20px 24px;
+      width: 100%;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    .instrucciones h2 { color: #14532d; font-size: 1.05rem; margin-bottom: 10px; }
+    .instrucciones ul { padding-left: 20px; color: #57534e; font-size: 0.95rem; line-height: 1.9; }
+
+    .btn-start {
+      border: none;
+      background: linear-gradient(135deg, #22c55e, #15803d);
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 800;
+      padding: 18px 56px;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(34,197,94,0.4);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-start:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(34,197,94,0.5); }
+
+    /* ========== QUIZ SCREEN ========== */
+    #pantalla-quiz {
+      display: none;
+      width: 100%;
+      max-width: 640px;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .barra-progreso-wrap {
+      background: rgba(255,255,255,0.5);
+      border-radius: 50px;
+      height: 10px;
+      width: 100%;
+      overflow: hidden;
+    }
+    .barra-progreso-fill {
+      height: 100%;
+      background: #14532d;
+      border-radius: 50px;
+      transition: width 0.4s ease;
+    }
+
+    .info-pregunta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #14532d;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .tarjeta-pregunta {
+      background: white;
+      border-radius: 20px;
+      padding: 24px 22px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+    }
+
+    .seccion-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 50px;
+      background: #22c55e;
+      color: white;
+      margin-bottom: 14px;
+    }
+
+    .pregunta-emoji {
+      font-size: 3.5rem;
+      text-align: center;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .texto-pregunta {
+      font-size: 1.1rem;
+      color: #1c1917;
+      line-height: 1.55;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+      white-space: pre-line;
+    }
+
+    .match-desc-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 0.88rem;
+      color: #374151;
+      line-height: 1.8;
+      margin-bottom: 16px;
+      white-space: pre-line;
+    }
+
+    /* ── 4-option MC ── */
+    .opciones-mc { display: flex; flex-direction: column; gap: 10px; }
+
+    .btn-opcion {
+      border: 2px solid #e7e5e4;
+      border-radius: 12px;
+      padding: 13px 16px;
+      text-align: left;
+      background: white;
+      cursor: pointer;
+      font-size: 0.97rem;
+      color: #292524;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+      line-height: 1.4;
+    }
+    .btn-opcion:hover:not(:disabled) {
+      background: #f0fdf4;
+      border-color: #22c55e;
+      transform: translateX(3px);
+    }
+    .letra-opcion {
+      min-width: 30px; height: 30px;
+      border-radius: 50%;
+      background: #f5f5f4;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; font-size: 0.9rem; color: #57534e;
+      flex-shrink: 0;
+    }
+    .btn-opcion.correcta { background: #dcfce7; border-color: #22c55e; }
+    .btn-opcion.correcta .letra-opcion { background: #22c55e; color: white; }
+    .btn-opcion.incorrecta { background: #fee2e2; border-color: #ef4444; }
+    .btn-opcion.incorrecta .letra-opcion { background: #ef4444; color: white; }
+    .btn-opcion:disabled { cursor: default; transform: none; }
+
+    /* ── 2-button choice ── */
+    .opciones-2btn { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .btn-2choice {
+      border: 2px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 18px 10px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: white;
+      color: #374151;
+      text-align: center;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    }
+    .btn-2choice:hover:not(:disabled) { background: #f0fdf4; border-color: #22c55e; transform: translateY(-2px); }
+    .btn-2choice.correcta  { background: #dcfce7; border-color: #22c55e; color: #14532d; }
+    .btn-2choice.incorrecta{ background: #fee2e2; border-color: #ef4444; color: #dc2626; }
+    .btn-2choice:disabled  { cursor: default; transform: none; }
+
+    /* ── 3-button choice ── */
+    .opciones-3btn { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+    .btn-3choice {
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 14px 6px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: white;
+      color: #374151;
+      text-align: center;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    }
+    .btn-3choice:hover:not(:disabled) { background: #f0fdf4; border-color: #22c55e; transform: translateY(-2px); }
+    .btn-3choice.correcta  { background: #dcfce7; border-color: #22c55e; color: #14532d; }
+    .btn-3choice.incorrecta{ background: #fee2e2; border-color: #ef4444; color: #dc2626; }
+    .btn-3choice:disabled  { cursor: default; transform: none; }
+
+    /* ── Classify grid (multi-item on one card) ── */
+    .cl-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .cl-card {
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 8px 4px 6px;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+    .cl-card .cl-emoji { font-size: 1.8rem; display: block; }
+    .cl-card .cl-name {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #374151;
+      margin: 3px 0 7px;
+      line-height: 1.3;
+    }
+    .cl-btns { display: flex; gap: 3px; }
+    .cl-btn {
+      flex: 1;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 1px;
+      font-size: 0.62rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: #f3f4f6;
+      color: #9ca3af;
+      line-height: 1.3;
+      transition: background 0.12s, color 0.12s;
+    }
+    .cl-btn.sel-a { background: #fef3c7; color: #92400e; }
+    .cl-btn.sel-b { background: #dbeafe; color: #1e40af; }
+    .cl-btn.ok    { background: #dcfce7 !important; color: #14532d !important; }
+    .cl-btn.bad   { background: #fee2e2 !important; color: #dc2626 !important; }
+    .cl-btn:disabled { cursor: default; }
+
+    .btn-check-grid {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #22c55e, #15803d);
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-check-grid:hover { opacity: 0.88; }
+
+    /* ── Feedback ── */
+    .feedback {
+      display: none;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-top: 14px;
+    }
+    .feedback.ok  { background: #dcfce7; color: #15803d; display: block; }
+    .feedback.mal { background: #fee2e2; color: #b91c1c; display: block; }
+
+    /* ── Next button ── */
+    .btn-siguiente {
+      display: none;
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      background: #14532d;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-siguiente:hover { background: #166534; transform: translateY(-2px); }
+
+    /* ========== RESULT SCREEN ========== */
+    #pantalla-resultado {
+      display: none;
+      width: 100%;
+      max-width: 500px;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .tarjeta-resultado {
+      background: white;
+      border-radius: 24px;
+      padding: 36px 28px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      width: 100%;
+    }
+
+    .circulo-nota {
+      width: 130px; height: 130px;
+      border-radius: 50%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-weight: 900; color: white;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .circulo-nota .nota-num { font-size: 2.2rem; line-height: 1; }
+    .circulo-nota .nota-pct { font-size: 0.95rem; font-weight: 600; margin-top: 2px; }
+
+    .nivel-excelente { background: linear-gradient(135deg, #22c55e, #15803d); }
+    .nivel-bien      { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+    .nivel-regular   { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .nivel-bajo      { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+    .resultado-titulo { font-size: 1.5rem; font-weight: 900; color: #1c1917; margin-bottom: 8px; }
+    .resultado-sub    { font-size: 1rem; color: #57534e; margin-bottom: 22px; }
+
+    .detalle-respuestas { display: flex; justify-content: center; gap: 28px; margin-bottom: 24px; }
+    .detalle-item  { text-align: center; }
+    .detalle-num   { font-size: 1.9rem; font-weight: 900; }
+    .verde         { color: #22c55e; }
+    .rojo          { color: #ef4444; }
+    .amarillo      { color: #f59e0b; }
+    .detalle-lbl   { font-size: 0.82rem; color: #78716c; }
+
+    .botones-resultado { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .btn-resultado {
+      padding: 12px 22px; border-radius: 12px; border: none;
+      font-size: 1rem; font-weight: bold; cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    .btn-resultado:hover { transform: translateY(-2px); opacity: 0.9; }
+    .btn-reintentar   { background: #14532d; color: white; }
+    .btn-otra-version { background: #f0fdf4; color: #14532d; border: 2px solid #22c55e; }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 500px) {
+      body { padding: 16px 10px 40px; }
+      .titulo-prueba h1 { font-size: 1.6rem; }
+      .tarjeta-pregunta { padding: 18px 14px; }
+      .texto-pregunta   { font-size: 1rem; }
+      .btn-opcion       { font-size: 0.9rem; padding: 11px 12px; }
+      .btn-2choice      { padding: 14px 6px; font-size: 0.95rem; }
+      .btn-3choice      { padding: 12px 4px; font-size: 0.9rem; }
+      .pregunta-emoji   { font-size: 2.8rem; }
+      .cl-grid          { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="volver" href="../index.html">← Science</a>
+
+  <!-- ======== START SCREEN ======== -->
+  <div id="pantalla-inicio">
+    <div class="titulo-prueba">
+      <div class="icono">🔬</div>
+      <h1>Science Practice</h1>
+      <p>III Evaluation · I Semester</p>
+    </div>
+    <div class="instrucciones">
+      <h2>📋 Instructions</h2>
+      <ul>
+        <li>There are <strong>22 questions</strong> covering all exam topics.</li>
+        <li>Read each question and tap the correct answer.</li>
+        <li>You will get immediate feedback after each answer.</li>
+        <li>At the end you will see your final score.</li>
+      </ul>
+    </div>
+    <button class="btn-start" onclick="iniciar()">Start Practice ▶</button>
+  </div>
+
+  <!-- ======== QUIZ SCREEN ======== -->
+  <div id="pantalla-quiz">
+    <div class="info-pregunta">
+      <span id="contador-texto">Question 1 of 22</span>
+      <span id="puntaje-texto">✔ 0 correct</span>
+    </div>
+    <div class="barra-progreso-wrap">
+      <div class="barra-progreso-fill" id="barra-fill" style="width:0%"></div>
+    </div>
+
+    <div class="tarjeta-pregunta">
+      <div class="seccion-badge" id="seccion-badge"></div>
+      <span class="pregunta-emoji" id="pregunta-emoji" style="display:none"></span>
+      <div class="texto-pregunta" id="texto-pregunta"></div>
+      <div class="match-desc-box" id="match-desc-box" style="display:none"></div>
+      <div id="contenedor-opciones"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+
+    <button class="btn-siguiente" id="btn-siguiente" onclick="siguientePregunta()">
+      Next question →
+    </button>
+  </div>
+
+  <!-- ======== RESULT SCREEN ======== -->
+  <div id="pantalla-resultado">
+    <div class="tarjeta-resultado">
+      <div class="circulo-nota" id="circulo-nota">
+        <span class="nota-num" id="nota-num"></span>
+        <span class="nota-pct" id="nota-pct"></span>
+      </div>
+      <div class="resultado-titulo" id="resultado-titulo"></div>
+      <div class="resultado-sub"    id="resultado-sub"></div>
+      <div class="detalle-respuestas">
+        <div class="detalle-item">
+          <div class="detalle-num verde"    id="total-correctas">0</div>
+          <div class="detalle-lbl">Correct</div>
+        </div>
+        <div class="detalle-item">
+          <div class="detalle-num rojo"     id="total-incorrectas">0</div>
+          <div class="detalle-lbl">Incorrect</div>
+        </div>
+        <div class="detalle-item">
+          <div class="detalle-num amarillo" id="total-total">36</div>
+          <div class="detalle-lbl">Total</div>
+        </div>
+      </div>
+      <div class="botones-resultado">
+        <button class="btn-resultado btn-reintentar"   onclick="reintentar()">Try Again</button>
+        <button class="btn-resultado btn-otra-version" onclick="volverInicio()">← Back to Start</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  /* ============================================================
+     QUESTION BANK
+     type: 'mc4'         — 4-option multiple choice (A/B/C/D)
+           '2btn'        — 2-button choice
+           '3btn'        — 3-button choice
+           'match3'      — 3-button match with description box
+           'classify-grid' — all items on one card, check button
+  ============================================================ */
+
+  const PREGUNTAS = [
+
+    // ── Q1: All animals on one card ─────────────────────────
+    { sec:'🐾 Animals', type:'classify-grid',
+      pregunta:'Classify each animal as Land or Aquatic',
+      opciones:['🌿 Land', '🌊 Aquatic'],
+      items:[
+        { emoji:'🐟', name:'Fish',       correcta:1 },
+        { emoji:'🐢', name:'Sea Turtle', correcta:1 },
+        { emoji:'🐴', name:'Horse',      correcta:0 },
+        { emoji:'🦏', name:'Rhino',      correcta:0 },
+        { emoji:'🐠', name:'Seahorse',   correcta:1 },
+        { emoji:'🐙', name:'Octopus',    correcta:1 },
+        { emoji:'🐻', name:'Bear',       correcta:0 },
+        { emoji:'🐯', name:'Tiger',      correcta:0 },
+        { emoji:'🌟', name:'Starfish',   correcta:1 },
+        { emoji:'🐱', name:'Cat',        correcta:0 },
+      ]
+    },
+
+    // ── Q2: All plants on one card ───────────────────────────
+    { sec:'🌱 Plants', type:'classify-grid',
+      pregunta:'Classify each plant as Land or Aquatic',
+      opciones:['🌿 Land', '🌊 Aquatic'],
+      items:[
+        { emoji:'🌹', name:'Rose',       correcta:0 },
+        { emoji:'🌵', name:'Cactus',     correcta:0 },
+        { emoji:'🌻', name:'Sunflower',  correcta:0 },
+        { emoji:'🌸', name:'Water Lily', correcta:1 },
+        { emoji:'🌿', name:'Seaweed',    correcta:1 },
+        { emoji:'🪷', name:'Lotus',      correcta:1 },
+      ]
+    },
+
+    // ── Characteristics (2 questions) ───────────────────────
+    { sec:'📝 Characteristics', type:'mc4',
+      pregunta:'Which of the following is a characteristic of aquatic animals?',
+      opciones:[
+        'They have thick fur and breathe air through lungs on land',
+        'They live in or near water and breathe through gills or hold their breath',
+        'They run fast on four legs and feed on grass in dry areas',
+        'They sleep in dens during winter and eat berries',
+      ], correcta:1 },
+
+    { sec:'📝 Characteristics', type:'mc4',
+      pregunta:'Which of the following is a characteristic of land animals?',
+      opciones:[
+        'They have gills to breathe underwater and fins to swim',
+        'They live in the ocean and feed on seaweed and algae',
+        'They breathe air through lungs and move on land',
+        'They float on water using special body structures',
+      ], correcta:2 },
+
+    // ── Definitions (2 questions) ────────────────────────────
+    { sec:'🔬 Components', type:'mc4',
+      pregunta:'What are biotic components of nature?',
+      opciones:[
+        'Non-living elements of nature such as water, air, and soil',
+        'Living parts of nature such as plants, animals, fungi, and bacteria',
+        'Only the rocks and minerals found underground',
+        'The temperature and sunlight in an environment',
+      ], correcta:1 },
+
+    { sec:'🔬 Components', type:'mc4',
+      pregunta:'What are abiotic components of nature?',
+      opciones:[
+        'Living organisms like animals, plants, and bacteria',
+        'Only the food that animals eat in nature',
+        'Non-living elements of nature such as water, air, soil, and sunlight',
+        'Insects and microorganisms that live underground',
+      ], correcta:2 },
+
+    // ── Biotic / Abiotic classify (8 questions) ─────────────
+    { sec:'🔬 Components', type:'2btn', emoji:'🌳',
+      pregunta:'Is a Tree a Biotic or Abiotic component?',
+      opciones:['🌱 Biotic','🪨 Abiotic'], correcta:0 },
+
+    { sec:'🔬 Components', type:'2btn', emoji:'💧',
+      pregunta:'Is Water a Biotic or Abiotic component?',
+      opciones:['🌱 Biotic','🪨 Abiotic'], correcta:1 },
+
+    { sec:'🔬 Components', type:'2btn', emoji:'🐕',
+      pregunta:'Is a Dog a Biotic or Abiotic component?',
+      opciones:['🌱 Biotic','🪨 Abiotic'], correcta:0 },
+
+    { sec:'🔬 Components', type:'2btn', emoji:'☀️',
+      pregunta:'Is the Sun a Biotic or Abiotic component?',
+      opciones:['🌱 Biotic','🪨 Abiotic'], correcta:1 },
+
+    { sec:'🔬 Components', type:'2btn', emoji:'🍄',
+      pregunta:'Is a Mushroom a Biotic or Abiotic component?',
+      opciones:['🌱 Biotic','🪨 Abiotic'], correcta:0 },
+
+    { sec:'🔬 Components', type:'2btn', emoji:'☁️',
+      pregunta:'Are Clouds a Biotic or Abiotic component?',
+      opciones:['🌱 Biotic','🪨 Abiotic'], correcta:1 },
+
+    { sec:'🔬 Components', type:'2btn', emoji:'🦠',
+      pregunta:'Are Bacteria a Biotic or Abiotic component?',
+      opciones:['🌱 Biotic','🪨 Abiotic'], correcta:0 },
+
+    { sec:'🔬 Components', type:'2btn', emoji:'🪨',
+      pregunta:'Is a Rock a Biotic or Abiotic component?',
+      opciones:['🌱 Biotic','🪨 Abiotic'], correcta:1 },
+
+    // ── Fill in the blank (5 questions) ─────────────────────
+    { sec:'✏️ Fill in the Blank', type:'3btn',
+      pregunta:'"The plants obtain minerals and water from the ___"',
+      opciones:['soil','air','water'], correcta:0 },
+
+    { sec:'✏️ Fill in the Blank', type:'3btn',
+      pregunta:'"The ___ contains the oxygen that land animals breathe\nand carbon dioxide that plants need to live"',
+      opciones:['soil','air','water'], correcta:1 },
+
+    { sec:'✏️ Fill in the Blank', type:'3btn',
+      pregunta:'"The ___ is an essential liquid for life"',
+      opciones:['soil','air','water'], correcta:2 },
+
+    { sec:'✏️ Fill in the Blank', type:'3btn',
+      pregunta:'"___ is what terrestrial animals drink"',
+      opciones:['soil','air','water'], correcta:2 },
+
+    { sec:'✏️ Fill in the Blank', type:'3btn',
+      pregunta:'"___ allows natural plant formations\nthat they require to live"',
+      opciones:['soil','air','water'], correcta:0 },
+
+    // ── Match columns (3 questions) ──────────────────────────
+    { sec:'🔗 Match', type:'match3',
+      pregunta:'Which description matches "The water"?',
+      matchDesc:'A. Plants obtain minerals and water from the soil.\nB. It is an essential liquid for life.\nC. It contains the oxygen that land animals breathe and carbon dioxide that plants need to live.',
+      opciones:['A','B','C'], correcta:1 },
+
+    { sec:'🔗 Match', type:'match3',
+      pregunta:'Which description matches "The air"?',
+      matchDesc:'A. Plants obtain minerals and water from the soil.\nB. It is an essential liquid for life.\nC. It contains the oxygen that land animals breathe and carbon dioxide that plants need to live.',
+      opciones:['A','B','C'], correcta:2 },
+
+    { sec:'🔗 Match', type:'match3',
+      pregunta:'Which description matches "The soil"?',
+      matchDesc:'A. Plants obtain minerals and water from the soil.\nB. It is an essential liquid for life.\nC. It contains the oxygen that land animals breathe and carbon dioxide that plants need to live.',
+      opciones:['A','B','C'], correcta:0 },
+
+  ];
+
+  /* Points possible per question type:
+     classify-grid  → items.length (10 for animals)
+     everything else → 1
+     Total: 10 + 6 + 2 + 2 + 8 + 5 + 3 = 36 */
+  const TOTAL_POSIBLES = PREGUNTAS.reduce(
+    (s, q) => s + (q.type === 'classify-grid' ? q.items.length : 1), 0);
+
+  let indiceActual  = 0;
+  let aciertos      = 0;
+  let respondida    = false;
+  let gridSel       = {};   // for classify-grid: item index → chosen option index
+  let gridChecked   = false;
+
+  /* ============================================================ */
+
+  function iniciar() {
+    indiceActual = 0;
+    aciertos     = 0;
+    respondida   = false;
+
+    document.getElementById('pantalla-inicio').style.display    = 'none';
+    document.getElementById('pantalla-quiz').style.display      = 'flex';
+    document.getElementById('pantalla-resultado').style.display = 'none';
+
+    mostrarPregunta();
+  }
+
+  function mostrarPregunta() {
+    respondida   = false;
+    gridSel      = {};
+    gridChecked  = false;
+
+    const q     = PREGUNTAS[indiceActual];
+    const total = PREGUNTAS.length;
+
+    document.getElementById('contador-texto').textContent =
+      `Question ${indiceActual + 1} of ${total}`;
+    document.getElementById('puntaje-texto').textContent =
+      `✔ ${aciertos} correct`;
+    document.getElementById('barra-fill').style.width =
+      `${(indiceActual / total) * 100}%`;
+
+    document.getElementById('seccion-badge').textContent = q.sec;
+
+    const emojiEl = document.getElementById('pregunta-emoji');
+    if (q.emoji) {
+      emojiEl.textContent = q.emoji;
+      emojiEl.style.display = 'block';
+    } else {
+      emojiEl.style.display = 'none';
+    }
+
+    document.getElementById('texto-pregunta').textContent = q.pregunta;
+
+    const matchBox = document.getElementById('match-desc-box');
+    if (q.type === 'match3') {
+      matchBox.textContent = q.matchDesc;
+      matchBox.style.display = 'block';
+    } else {
+      matchBox.style.display = 'none';
+    }
+
+    const contenedor = document.getElementById('contenedor-opciones');
+    contenedor.innerHTML = '';
+
+    if (q.type === 'classify-grid') {
+      renderClassifyGrid(q, contenedor);
+
+    } else if (q.type === 'mc4') {
+      const div = document.createElement('div');
+      div.className = 'opciones-mc';
+      const LETRAS = ['A','B','C','D'];
+      q.opciones.forEach((texto, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-opcion';
+        btn.dataset.idx = i;
+        btn.innerHTML = `<span class="letra-opcion">${LETRAS[i]}</span>${texto}`;
+        btn.onclick = () => seleccionar(i, q.correcta, 'mc4');
+        div.appendChild(btn);
+      });
+      contenedor.appendChild(div);
+
+    } else if (q.type === '2btn') {
+      const div = document.createElement('div');
+      div.className = 'opciones-2btn';
+      q.opciones.forEach((texto, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-2choice';
+        btn.dataset.idx = i;
+        btn.textContent = texto;
+        btn.onclick = () => seleccionar(i, q.correcta, '2btn');
+        div.appendChild(btn);
+      });
+      contenedor.appendChild(div);
+
+    } else if (q.type === '3btn' || q.type === 'match3') {
+      const div = document.createElement('div');
+      div.className = 'opciones-3btn';
+      q.opciones.forEach((texto, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-3choice';
+        btn.dataset.idx = i;
+        btn.textContent = texto;
+        btn.onclick = () => seleccionar(i, q.correcta, '3btn');
+        div.appendChild(btn);
+      });
+      contenedor.appendChild(div);
+    }
+
+    const fb = document.getElementById('feedback');
+    fb.className = 'feedback';
+    fb.textContent = '';
+    document.getElementById('btn-siguiente').style.display = 'none';
+  }
+
+  /* ── Classify-grid rendering ── */
+  function renderClassifyGrid(q, contenedor) {
+    const grid = document.createElement('div');
+    grid.className = 'cl-grid';
+
+    q.items.forEach((item, i) => {
+      const card = document.createElement('div');
+      card.className = 'cl-card';
+      card.id = `cl-card-${i}`;
+
+      const emoji = document.createElement('span');
+      emoji.className = 'cl-emoji';
+      emoji.textContent = item.emoji;
+
+      const name = document.createElement('div');
+      name.className = 'cl-name';
+      name.textContent = item.name;
+
+      const btns = document.createElement('div');
+      btns.className = 'cl-btns';
+
+      q.opciones.forEach((label, oi) => {
+        const btn = document.createElement('button');
+        btn.className = 'cl-btn';
+        btn.id = `cl-btn-${i}-${oi}`;
+        btn.textContent = label.replace(/^.\s/, ''); // strip emoji prefix
+        btn.addEventListener('click', () => pickGrid(i, oi, q.opciones.length));
+        btns.appendChild(btn);
+      });
+
+      card.appendChild(emoji);
+      card.appendChild(name);
+      card.appendChild(btns);
+      grid.appendChild(card);
+    });
+
+    contenedor.appendChild(grid);
+
+    const checkBtn = document.createElement('button');
+    checkBtn.className = 'btn-check-grid';
+    checkBtn.id = 'btn-check-grid';
+    checkBtn.textContent = 'Check Answers ✅';
+    checkBtn.addEventListener('click', () => checkGrid(q));
+    contenedor.appendChild(checkBtn);
+  }
+
+  function pickGrid(itemIdx, choiceIdx, numChoices) {
+    if (gridChecked) return;
+    gridSel[itemIdx] = choiceIdx;
+    for (let oi = 0; oi < numChoices; oi++) {
+      const b = document.getElementById(`cl-btn-${itemIdx}-${oi}`);
+      b.classList.remove('sel-a', 'sel-b');
+      if (oi === choiceIdx) b.classList.add(oi === 0 ? 'sel-a' : 'sel-b');
+    }
+  }
+
+  function checkGrid(q) {
+    if (gridChecked) return;
+    gridChecked = true;
+    respondida  = true;
+
+    let correct = 0;
+    q.items.forEach((item, i) => {
+      const numOpts = q.opciones.length;
+      for (let oi = 0; oi < numOpts; oi++) {
+        const b = document.getElementById(`cl-btn-${i}-${oi}`);
+        b.disabled = true;
+        b.classList.remove('sel-a', 'sel-b');
+      }
+      const correctBtn = document.getElementById(`cl-btn-${i}-${item.correcta}`);
+      correctBtn.classList.add('ok');
+
+      const chosen = gridSel[i];
+      if (chosen !== undefined && chosen !== item.correcta) {
+        document.getElementById(`cl-btn-${i}-${chosen}`).classList.add('bad');
+      } else if (chosen === item.correcta) {
+        correct++;
+      }
+    });
+
+    aciertos += correct;
+
+    const fb = document.getElementById('feedback');
+    if (correct === q.items.length) {
+      fb.textContent = `✅ Perfect! All ${q.items.length} correct!`;
+      fb.className = 'feedback ok';
+    } else {
+      fb.textContent = `${correct} / ${q.items.length} correct — green shows the right answers`;
+      fb.className = correct >= Math.ceil(q.items.length / 2) ? 'feedback ok' : 'feedback mal';
+    }
+
+    document.getElementById('puntaje-texto').textContent = `✔ ${aciertos} correct`;
+    document.getElementById('btn-check-grid').style.display = 'none';
+
+    const btnSig = document.getElementById('btn-siguiente');
+    btnSig.textContent = indiceActual + 1 < PREGUNTAS.length
+      ? 'Next question →' : 'See results →';
+    btnSig.style.display = 'block';
+  }
+
+  /* ── Standard question selection ── */
+  function seleccionar(idx, correcta, tipo) {
+    if (respondida) return;
+    respondida = true;
+
+    const esCorrecto = (idx === correcta);
+    if (esCorrecto) aciertos++;
+
+    const clsBtn = tipo === 'mc4' ? '.btn-opcion' :
+                   tipo === '2btn' ? '.btn-2choice' : '.btn-3choice';
+    document.querySelectorAll(clsBtn).forEach(b => {
+      b.disabled = true;
+      if (parseInt(b.dataset.idx) === correcta) b.classList.add('correcta');
+    });
+    if (!esCorrecto) {
+      document.querySelectorAll(clsBtn)[idx].classList.add('incorrecta');
+    }
+
+    const fb = document.getElementById('feedback');
+    if (esCorrecto) {
+      fb.textContent = '✅ Correct!';
+      fb.className = 'feedback ok';
+    } else {
+      fb.textContent = `❌ Incorrect! The correct answer is: ${PREGUNTAS[indiceActual].opciones[correcta]}`;
+      fb.className = 'feedback mal';
+    }
+
+    document.getElementById('puntaje-texto').textContent = `✔ ${aciertos} correct`;
+
+    const btnSig = document.getElementById('btn-siguiente');
+    btnSig.textContent = indiceActual + 1 < PREGUNTAS.length
+      ? 'Next question →' : 'See results →';
+    btnSig.style.display = 'block';
+  }
+
+  function siguientePregunta() {
+    indiceActual++;
+    if (indiceActual < PREGUNTAS.length) {
+      mostrarPregunta();
+    } else {
+      mostrarResultado();
+    }
+  }
+
+  function mostrarResultado() {
+    document.getElementById('pantalla-quiz').style.display      = 'none';
+    document.getElementById('pantalla-resultado').style.display = 'flex';
+
+    const incorrectas = TOTAL_POSIBLES - aciertos;
+    const pct         = Math.round((aciertos / TOTAL_POSIBLES) * 100);
+
+    document.getElementById('nota-num').textContent          = `${aciertos}/${TOTAL_POSIBLES}`;
+    document.getElementById('nota-pct').textContent          = `${pct}%`;
+    document.getElementById('total-correctas').textContent   = aciertos;
+    document.getElementById('total-incorrectas').textContent = incorrectas;
+    document.getElementById('total-total').textContent       = TOTAL_POSIBLES;
+
+    let nivel, titulo, sub;
+    if (pct >= 90) {
+      nivel = 'nivel-excelente'; titulo = 'Excellent! 🏆';
+      sub = 'You know your Science topics really well!';
+    } else if (pct >= 70) {
+      nivel = 'nivel-bien';      titulo = 'Great job! 👏';
+      sub = 'You have a good grasp of the material. Keep it up!';
+    } else if (pct >= 50) {
+      nivel = 'nivel-regular';   titulo = 'Keep practicing! 💪';
+      sub = 'Review the topics and try again to improve your score.';
+    } else {
+      nivel = 'nivel-bajo';      titulo = 'Study more! 📚';
+      sub = 'Read your notes again and then give it another try!';
+    }
+
+    document.getElementById('circulo-nota').className    = `circulo-nota ${nivel}`;
+    document.getElementById('resultado-titulo').textContent = titulo;
+    document.getElementById('resultado-sub').textContent    = sub;
+  }
+
+  function reintentar() {
+    iniciar();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function volverInicio() {
+    document.getElementById('pantalla-resultado').style.display = 'none';
+    document.getElementById('pantalla-inicio').style.display    = 'flex';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
