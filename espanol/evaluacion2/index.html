@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Español — II Evaluación · II Periodo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #fce7f3 0%, #f9a8d4 50%, #ec4899 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 40px;
+    }
+
+    .volver {
+      align-self: flex-start;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #9d174d;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      transition: opacity 0.2s;
+    }
+    .volver:hover { opacity: 0.7; }
+
+    /* ===== PANTALLA: INICIO ===== */
+    #pantalla-inicio {
+      width: 100%;
+      max-width: 640px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .titulo-prueba { text-align: center; }
+    .titulo-prueba .icono { font-size: 3.5rem; margin-bottom: 10px; }
+    .titulo-prueba h1 {
+      color: #9d174d;
+      font-size: 2rem;
+      text-shadow: 1px 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 6px;
+    }
+    .titulo-prueba p { color: #831843; font-size: 1rem; }
+
+    .instrucciones {
+      background: white;
+      border-radius: 16px;
+      padding: 20px 24px;
+      width: 100%;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    .instrucciones h2 { color: #9d174d; font-size: 1.05rem; margin-bottom: 10px; }
+    .instrucciones ul { padding-left: 20px; color: #57534e; font-size: 0.95rem; line-height: 1.8; }
+
+    /* Repaso desplegable */
+    .repaso {
+      background: white;
+      border-radius: 16px;
+      width: 100%;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    .repaso summary {
+      cursor: pointer;
+      padding: 16px 24px;
+      color: #9d174d;
+      font-weight: bold;
+      font-size: 1.05rem;
+      list-style: none;
+    }
+    .repaso summary::-webkit-details-marker { display: none; }
+    .repaso summary::after { content: ' ▸'; }
+    .repaso[open] summary::after { content: ' ▾'; }
+    .repaso-contenido {
+      padding: 0 24px 20px;
+      color: #44403c;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+    .repaso-contenido h3 {
+      color: #be185d;
+      font-size: 0.95rem;
+      margin: 12px 0 4px;
+    }
+    .repaso-contenido ul { padding-left: 20px; }
+
+    .selector-version { width: 100%; }
+    .selector-version h2 {
+      color: #9d174d;
+      font-size: 1.2rem;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .versiones-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      width: 100%;
+    }
+
+    .btn-version {
+      border: none;
+      border-radius: 20px;
+      padding: 24px 20px;
+      cursor: pointer;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-version:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(0,0,0,0.25); }
+    .btn-version span.letra { font-size: 2.6rem; }
+    .btn-version span.sub { font-size: 0.85rem; font-weight: 600; opacity: 0.9; }
+    .btn-version.ve { grid-column: 1 / -1; }
+
+    .va { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+    .vb { background: linear-gradient(135deg, #22c55e, #15803d); }
+    .vc { background: linear-gradient(135deg, #f97316, #c2410c); }
+    .vd { background: linear-gradient(135deg, #a855f7, #7e22ce); }
+    .ve { background: linear-gradient(135deg, #ec4899, #9d174d); }
+
+    /* ===== PANTALLA: QUIZ ===== */
+    #pantalla-quiz {
+      display: none;
+      width: 100%;
+      max-width: 680px;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .barra-progreso-wrap {
+      background: rgba(255,255,255,0.5);
+      border-radius: 50px;
+      height: 10px;
+      width: 100%;
+      overflow: hidden;
+    }
+    .barra-progreso-fill {
+      height: 100%;
+      background: #9d174d;
+      border-radius: 50px;
+      transition: width 0.4s ease;
+    }
+
+    .info-pregunta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #831843;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .tarjeta-pregunta {
+      background: white;
+      border-radius: 20px;
+      padding: 24px 22px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+    }
+
+    .badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 50px;
+      color: white;
+    }
+    .badge-seccion { background: #fce7f3; color: #9d174d; }
+
+    .texto-pregunta {
+      font-size: 1.12rem;
+      color: #1c1917;
+      line-height: 1.5;
+      font-weight: 600;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    /* Caja de lectura (tipos de texto) */
+    .caja-texto {
+      background: #fdf2f8;
+      border-left: 5px solid #ec4899;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 1rem;
+      color: #374151;
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    /* ── Botones de opción (2/3 columnas) ── */
+    .opciones-fila { display: grid; gap: 10px; }
+    .opciones-fila.c3 { grid-template-columns: repeat(3, 1fr); }
+
+    .btn-op {
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 14px 6px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: white;
+      color: #374151;
+      text-align: center;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    }
+    .btn-op:hover:not(:disabled) { background: #fdf2f8; border-color: #ec4899; transform: translateY(-2px); }
+    .btn-op.correcta   { background: #dcfce7; border-color: #22c55e; color: #14532d; }
+    .btn-op.incorrecta { background: #fee2e2; border-color: #ef4444; color: #dc2626; }
+    .btn-op:disabled   { cursor: default; transform: none; }
+
+    /* ── Cuadrícula (completar / clasificar varias palabras) ── */
+    .cl-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .cl-grid.ancha { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+
+    .cl-card {
+      border: 2px solid #f3e8ee;
+      border-radius: 12px;
+      padding: 10px 6px 8px;
+      text-align: center;
+    }
+    .cl-palabra {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+    .hueco {
+      display: inline-block;
+      min-width: 0.9em;
+      border-bottom: 3px solid #ec4899;
+      color: #be185d;
+      margin: 0 1px;
+    }
+    .hueco.ok  { color: #15803d; border-color: #22c55e; }
+    .hueco.bad { color: #dc2626; border-color: #ef4444; }
+
+    .cl-btns { display: grid; gap: 4px; }
+    .cl-btns.n2 { grid-template-columns: repeat(2, 1fr); }
+    .cl-btns.n3 { grid-template-columns: repeat(3, 1fr); }
+    .cl-btns.n4 { grid-template-columns: repeat(2, 1fr); }
+
+    .cl-btn {
+      border: none;
+      border-radius: 8px;
+      padding: 7px 2px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: #f3f4f6;
+      color: #6b7280;
+      transition: background 0.12s, color 0.12s;
+    }
+    .cl-btns.n4 .cl-btn { font-size: 0.78rem; padding: 7px 2px; }
+    .cl-btn.sel { background: #fbcfe8; color: #9d174d; }
+    .cl-btn.ok  { background: #dcfce7 !important; color: #14532d !important; }
+    .cl-btn.bad { background: #fee2e2 !important; color: #dc2626 !important; }
+    .cl-btn:disabled { cursor: default; }
+
+    /* ── Sujeto y predicado ── */
+    .leyenda {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .leyenda .l-suj { color: #1d4ed8; }
+    .leyenda .l-pred { color: #15803d; }
+
+    .oracion {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .palabra-btn {
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      background: white;
+      color: #1f2937;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s;
+    }
+    .palabra-btn:hover:not(:disabled) { border-color: #ec4899; }
+    .palabra-btn.suj  { background: #dbeafe; border-color: #3b82f6; color: #1e3a8a; }
+    .palabra-btn.pred { background: #dcfce7; border-color: #22c55e; color: #14532d; }
+    .palabra-btn.mal  { box-shadow: 0 0 0 3px #ef4444; }
+    .palabra-btn:disabled { cursor: default; }
+
+    .btn-comprobar {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #ec4899, #be185d);
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-comprobar:hover { opacity: 0.88; }
+    .btn-comprobar:disabled { opacity: 0.45; cursor: default; }
+
+    /* ── Feedback ── */
+    .feedback {
+      display: none;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+    .feedback.ok  { background: #dcfce7; color: #15803d; display: block; }
+    .feedback.mal { background: #fee2e2; color: #b91c1c; display: block; }
+
+    .btn-siguiente {
+      display: none;
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      background: #9d174d;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-siguiente:hover { background: #be185d; transform: translateY(-2px); }
+
+    /* ===== PANTALLA: RESULTADO ===== */
+    #pantalla-resultado {
+      display: none;
+      width: 100%;
+      max-width: 540px;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .tarjeta-resultado {
+      background: white;
+      border-radius: 24px;
+      padding: 36px 28px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      width: 100%;
+    }
+
+    .circulo-nota {
+      width: 130px; height: 130px;
+      border-radius: 50%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-weight: 900; color: white;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .circulo-nota .nota-num { font-size: 2.2rem; line-height: 1; }
+    .circulo-nota .nota-pct { font-size: 0.95rem; font-weight: 600; margin-top: 2px; }
+
+    .nivel-excelente { background: linear-gradient(135deg, #22c55e, #15803d); }
+    .nivel-bien      { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+    .nivel-regular   { background: linear-gradient(135deg, #f97316, #c2410c); }
+    .nivel-bajo      { background: linear-gradient(135deg, #ef4444, #991b1b); }
+
+    .resultado-titulo { font-size: 1.5rem; font-weight: 900; color: #292524; margin-bottom: 8px; }
+    .resultado-sub    { font-size: 1rem; color: #57534e; margin-bottom: 20px; }
+
+    .detalle-respuestas { display: flex; justify-content: center; gap: 24px; margin-bottom: 24px; }
+    .detalle-item { text-align: center; }
+    .detalle-num  { font-size: 1.8rem; font-weight: 900; }
+    .verde    { color: #22c55e; }
+    .rojo     { color: #ef4444; }
+    .rosado   { color: #ec4899; }
+    .detalle-lbl { font-size: 0.82rem; color: #78716c; }
+
+    .botones-resultado { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .btn-resultado {
+      padding: 13px 24px;
+      border-radius: 12px;
+      border: none;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    .btn-resultado:hover { transform: translateY(-2px); opacity: 0.9; }
+    .btn-reintentar   { background: #9d174d; color: white; }
+    .btn-otra-version { background: #fce7f3; color: #9d174d; border: 2px solid #ec4899; }
+
+    @media (max-width: 600px) {
+      body { padding: 16px 10px 40px; }
+      .titulo-prueba h1 { font-size: 1.5rem; }
+      .versiones-grid { gap: 10px; }
+      .btn-version { padding: 18px 14px; }
+      .btn-version span.letra { font-size: 2.2rem; }
+      .tarjeta-pregunta { padding: 18px 14px; }
+      .texto-pregunta { font-size: 1rem; }
+      .caja-texto { font-size: 0.95rem; }
+      .btn-op { font-size: 0.88rem; padding: 12px 4px; }
+      .cl-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
+      .cl-grid.ancha { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+      .cl-palabra { font-size: 1.1rem; }
+      .palabra-btn { font-size: 1rem; padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="volver" href="../index.html">← Español</a>
+
+  <!-- ======== PANTALLA INICIO ======== -->
+  <div id="pantalla-inicio">
+    <div class="titulo-prueba">
+      <div class="icono">✏️</div>
+      <h1>Español</h1>
+      <p>II Evaluación · II Periodo · 3° Grado</p>
+    </div>
+
+    <div class="instrucciones">
+      <h2>📋 Instrucciones</h2>
+      <ul>
+        <li>Elige una versión de la práctica (A, B, C, D o E).</li>
+        <li>Cada versión tiene ejemplos diferentes de los mismos temas.</li>
+        <li>Temas: uso de <strong>c, s, z</strong> · <strong>m</strong> antes de b · <strong>n</strong> antes de v · palabras agudas, graves, esdrújulas y sobresdrújulas · sujeto y predicado · tipos y partes del texto.</li>
+        <li>Al terminar verás tu calificación.</li>
+      </ul>
+    </div>
+
+    <details class="repaso">
+      <summary>📘 Repaso rápido (léelo antes de empezar)</summary>
+      <div class="repaso-contenido">
+        <h3>m antes de b · n antes de v</h3>
+        <ul>
+          <li>Antes de <strong>b</strong> (y de p) se escribe <strong>m</strong>: ca<strong>mb</strong>io, ho<strong>mb</strong>re.</li>
+          <li>Antes de <strong>v</strong> se escribe <strong>n</strong>: i<strong>nv</strong>ierno, e<strong>nv</strong>ase.</li>
+        </ul>
+        <h3>Uso de c, s y z</h3>
+        <ul>
+          <li>Las palabras que terminan en <strong>z</strong> cambian a <strong>ces</strong> en plural: lápiz → lápi<strong>c</strong>es, pez → pe<strong>c</strong>es.</li>
+          <li>Las palabras terminadas en <strong>-ción</strong> llevan c: canción, lección.</li>
+        </ul>
+        <h3>Clasificación de palabras por su sílaba tónica</h3>
+        <ul>
+          <li><strong>Aguda:</strong> se pronuncia más fuerte la última sílaba (ra-<u>tón</u>, pa-<u>pel</u>).</li>
+          <li><strong>Grave:</strong> la penúltima sílaba (<u>ár</u>-bol, <u>me</u>-sa).</li>
+          <li><strong>Esdrújula:</strong> la antepenúltima sílaba (<u>pá</u>-ja-ro). Siempre llevan tilde.</li>
+          <li><strong>Sobresdrújula:</strong> antes de la antepenúltima (<u>dí</u>-ga-me-lo). Siempre llevan tilde.</li>
+        </ul>
+        <h3>Sujeto y predicado</h3>
+        <ul>
+          <li><strong>Sujeto:</strong> de quién o de qué se habla en la oración.</li>
+          <li><strong>Predicado:</strong> lo que se dice del sujeto; siempre tiene el verbo.</li>
+        </ul>
+        <h3>Tipos de texto</h3>
+        <ul>
+          <li><strong>Descriptivo:</strong> explica con detalle cómo son lugares, animales, personas u objetos (formas, colores, sonidos, olores…).</li>
+          <li><strong>Narrativo:</strong> cuenta acciones reales o imaginarias de personajes en un lugar y tiempo.</li>
+          <li><strong>Informativo:</strong> informa sobre temas y explica hechos reales (noticias, avisos, enciclopedias…).</li>
+        </ul>
+        <h3>Partes del texto</h3>
+        <ul>
+          <li><strong>Introducción:</strong> el inicio; presenta el tema, los personajes o el lugar.</li>
+          <li><strong>Desarrollo:</strong> la parte central y más larga; ocurren los hechos o se explican las ideas.</li>
+          <li><strong>Conclusión:</strong> el final; se cierra el tema o se resuelve el problema.</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="selector-version">
+      <h2>¿Qué versión vas a hacer?</h2>
+      <div class="versiones-grid">
+        <button class="btn-version va" onclick="iniciarVersion(0)"><span class="letra">A</span><span class="sub">Versión A</span></button>
+        <button class="btn-version vb" onclick="iniciarVersion(1)"><span class="letra">B</span><span class="sub">Versión B</span></button>
+        <button class="btn-version vc" onclick="iniciarVersion(2)"><span class="letra">C</span><span class="sub">Versión C</span></button>
+        <button class="btn-version vd" onclick="iniciarVersion(3)"><span class="letra">D</span><span class="sub">Versión D</span></button>
+        <button class="btn-version ve" onclick="iniciarVersion(4)"><span class="letra">E</span><span class="sub">Versión E</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== PANTALLA QUIZ ======== -->
+  <div id="pantalla-quiz">
+    <div class="info-pregunta">
+      <span id="contador-texto">Pregunta 1 de 13</span>
+      <span id="puntaje-texto">✔ 0 puntos</span>
+    </div>
+    <div class="barra-progreso-wrap">
+      <div class="barra-progreso-fill" id="barra-fill" style="width:0%"></div>
+    </div>
+
+    <div class="tarjeta-pregunta">
+      <div class="badges">
+        <span class="badge" id="badge-version"></span>
+        <span class="badge badge-seccion" id="badge-seccion"></span>
+      </div>
+      <div class="texto-pregunta" id="texto-pregunta"></div>
+      <div id="contenedor"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+
+    <button class="btn-siguiente" id="btn-siguiente" onclick="siguientePregunta()">
+      Siguiente pregunta →
+    </button>
+  </div>
+
+  <!-- ======== PANTALLA RESULTADO ======== -->
+  <div id="pantalla-resultado">
+    <div class="tarjeta-resultado">
+      <div class="circulo-nota" id="circulo-nota">
+        <span class="nota-num" id="nota-num"></span>
+        <span class="nota-pct" id="nota-pct"></span>
+      </div>
+      <div class="resultado-titulo" id="resultado-titulo"></div>
+      <div class="resultado-sub" id="resultado-sub"></div>
+
+      <div class="detalle-respuestas">
+        <div class="detalle-item">
+          <div class="detalle-num verde" id="total-correctas">0</div>
+          <div class="detalle-lbl">Correctas</div>
+        </div>
+        <div class="detalle-item">
+          <div class="detalle-num rojo" id="total-incorrectas">0</div>
+          <div class="detalle-lbl">Incorrectas</div>
+        </div>
+        <div class="detalle-item">
+          <div class="detalle-num rosado" id="total-total">0</div>
+          <div class="detalle-lbl">Total</div>
+        </div>
+      </div>
+
+      <div class="botones-resultado">
+        <button class="btn-resultado btn-reintentar" onclick="reintentar()">Repetir esta versión</button>
+        <button class="btn-resultado btn-otra-version" onclick="volverInicio()">Elegir otra versión</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  /* ============================================================
+     BANCO DE EJERCICIOS — una entrada por versión (A–E)
+       csz, mn  → palabras con la letra que falta entre [corchetes]
+       acento   → [palabra, tipo]  0 aguda · 1 grave · 2 esdrújula · 3 sobresdrújula
+       sujetos  → [oración, índice de la primera palabra del predicado]
+       textos   → [texto, tipo]    0 descriptivo · 1 narrativo · 2 informativo
+       partes   → [pregunta, parte] 0 introducción · 1 desarrollo · 2 conclusión
+  ============================================================ */
+  const VERSIONES = [
+    // ───────────── VERSIÓN A ─────────────
+    {
+      csz: ['lápi[z]', '[c]ielo', 'me[s]a', '[z]apato', 'can[c]ión', 'pa[z]', 'ca[s]a', '[c]ebolla'],
+      mn:  ['ca[m]po', 'e[n]vase', 'ta[m]bién', 'i[n]vierno', 'ho[m]bre', 'co[n]vivir'],
+      acento: [['canción', 0], ['árbol', 1], ['pájaro', 2], ['dígamelo', 3],
+               ['papel', 0], ['mesa', 1], ['música', 2], ['cuéntaselo', 3]],
+      sujetos: [
+        ['El perro de Ana ladra muy fuerte.', 4],
+        ['Mi abuela prepara un pastel delicioso.', 2],
+        ['Los niños juegan fútbol en el recreo.', 2],
+        ['La mariposa amarilla vuela entre las flores.', 3],
+      ],
+      textos: [
+        ['Mi gata Luna es pequeña y muy suave. Tiene el pelo blanco con manchas grises, los ojos verdes como dos esmeraldas y una cola larga y esponjosa. Es tranquila y le encanta dormir al sol.', 0],
+        ['Había una vez un conejo llamado Tito que perdió su zanahoria favorita. La buscó por todo el bosque hasta que, al final del día, descubrió que su amiga la ardilla la había guardado para él. Desde entonces, fueron mejores amigos.', 1],
+        ['Las abejas son insectos muy importantes para la naturaleza. Ayudan a polinizar las plantas, lo que permite que crezcan frutas y verduras. Además, producen miel y cera.', 2],
+      ],
+      partes: [
+        ['¿Qué parte del texto es el inicio, donde se presenta el tema o los personajes?', 0],
+        ['¿Qué parte del texto es la más extensa, donde suceden los hechos más importantes?', 1],
+        ['¿Qué parte del texto es el final, donde se cierra el tema o se resuelve el problema?', 2],
+      ],
+    },
+    // ───────────── VERSIÓN B ─────────────
+    {
+      csz: ['[z]orro', 'ca[s]tillo', 'pe[c]es', 'ra[z]ón', '[s]ol', 'dul[c]e', 'ta[z]a', '[s]illa'],
+      mn:  ['ca[m]bio', 'i[n]vitado', 'so[m]bra', 'tra[n]vía', 'ta[m]bor', 'e[n]viar'],
+      acento: [['ratón', 0], ['lápiz', 1], ['teléfono', 2], ['cómpramelo', 3],
+               ['café', 0], ['libro', 1], ['sábado', 2], ['pregúntaselo', 3]],
+      sujetos: [
+        ['El gato negro duerme en el sillón.', 3],
+        ['Mis hermanos lavan el carro los sábados.', 2],
+        ['La maestra de tercer grado explica la lección.', 5],
+        ['Pedro come una manzana roja.', 1],
+      ],
+      textos: [
+        ['El sábado pasado, mi familia y yo fuimos al volcán Poás. Primero caminamos por un sendero lleno de neblina. Luego, cuando llegamos al mirador, el cráter apareció de repente. ¡Fue un día inolvidable!', 1],
+        ['AVISO: El próximo lunes no habrá lecciones porque se realizará una reunión de docentes. Las clases continuarán el martes en el horario normal. — La Dirección', 2],
+        ['La playa es de arena blanca y fina. El agua es de color turquesa y se siente tibia. Las palmeras altas dan sombra fresca y se escucha el suave sonido de las olas.', 0],
+      ],
+      partes: [
+        ['¿En qué parte del texto se resuelve el problema y termina la historia?', 2],
+        ['¿En qué parte del texto se presentan los personajes, el lugar y el tiempo de la historia?', 0],
+        ['¿En qué parte del texto ocurren las acciones y aparece el problema o conflicto?', 1],
+      ],
+    },
+    // ───────────── VERSIÓN C ─────────────
+    {
+      csz: ['[c]ereza', 'bra[z]o', 'prin[c]esa', '[s]apo', '[z]anahoria', 've[c]ino', 'lu[z]', '[s]emana'],
+      mn:  ['e[m]budo', 'i[n]vento', 'ti[m]bre', 'e[n]volver', 'a[m]bulancia', 'co[n]vencer'],
+      acento: [['corazón', 0], ['azúcar', 1], ['lámpara', 2], ['entrégamelo', 3],
+               ['reloj', 0], ['casa', 1], ['número', 2], ['cómetelo', 3]],
+      sujetos: [
+        ['Las tortugas marinas nadan en el océano.', 3],
+        ['Mi papá trabaja en un hospital.', 2],
+        ['Sofía y Daniel pintan un mural.', 3],
+        ['El volcán Arenal está en Alajuela.', 3],
+      ],
+      textos: [
+        ['El agua hierve a 100 grados Celsius. Cuando se calienta, se convierte en vapor. Cuando se enfría mucho, se convierte en hielo. Por eso el agua puede estar en estado líquido, sólido y gaseoso.', 2],
+        ['Mi abuelo es alto y delgado. Tiene el cabello canoso, usa anteojos redondos y siempre lleva un sombrero café. Es cariñoso, paciente y tiene una risa muy alegre.', 0],
+        ['Una mañana, Sofía encontró un perrito mojado frente a su casa. Lo secó con una toalla, le dio comida y buscó a su dueño por todo el barrio. Por la tarde, un niño llegó llorando de alegría a recogerlo.', 1],
+      ],
+      partes: [
+        ['Lee esta oración de un cuento: "Había una vez una niña llamada Ana que vivía cerca de un río." ¿A qué parte del texto pertenece?', 0],
+        ['Lee esta oración de un cuento: "De pronto, una tormenta destruyó el puente y Ana no pudo regresar a su casa." ¿A qué parte del texto pertenece?', 1],
+        ['Lee esta oración de un cuento: "Finalmente, Ana volvió a su casa y aprendió a ser más precavida." ¿A qué parte del texto pertenece?', 2],
+      ],
+    },
+    // ───────────── VERSIÓN D ─────────────
+    {
+      csz: ['co[c]ina', 'nari[z]', '[s]andía', 'pe[z]', 'gra[c]ias', 'a[z]ul', '[s]opa', 'a[c]eite'],
+      mn:  ['no[m]bre', 'i[n]visible', 'ha[m]bre', 'co[n]versar', 'sie[m]bra', 'e[n]vidia'],
+      acento: [['jabón', 0], ['fácil', 1], ['plátano', 2], ['dibújamelo', 3],
+               ['sofá', 0], ['cama', 1], ['brújula', 2], ['cántamela', 3]],
+      sujetos: [
+        ['El colibrí bebe el néctar de las flores.', 2],
+        ['Mi mejor amiga canta muy bonito.', 3],
+        ['Los estudiantes de la escuela visitaron el museo.', 5],
+        ['Carlos lee un libro de aventuras.', 1],
+      ],
+      textos: [
+        ['Hace mucho tiempo, un león dormía bajo un árbol. Un ratoncito pasó corriendo sobre él y lo despertó. El león quiso atraparlo, pero lo dejó ir. Días después, el ratón rompió la red donde el león había quedado atrapado.', 1],
+        ['El mercado de mi pueblo es grande y colorido. Huele a frutas frescas y a café recién chorreado. Hay puestos con mangos amarillos, sandías verdes y flores de todos los colores.', 0],
+        ['NOTICIA: Este fin de semana se celebró la feria del agricultor en la plaza central. Más de 50 productores vendieron frutas, verduras y quesos. La actividad se repetirá el próximo mes.', 2],
+      ],
+      partes: [
+        ['¿Qué parte del texto es el cuerpo, donde se amplía y explica la información del tema?', 1],
+        ['¿Qué parte del texto es la última, donde se presenta un cierre o una enseñanza?', 2],
+        ['¿Qué parte del texto le cuenta al lector de qué se va a tratar el texto?', 0],
+      ],
+    },
+    // ───────────── VERSIÓN E ─────────────
+    {
+      csz: ['cabe[z]a', '[c]ine', '[s]emilla', 've[z]', 'a[c]era', 'po[z]o', '[s]erpiente', 'ofi[c]ina'],
+      mn:  ['zu[m]bido', 'co[n]vertir', 'a[m]bos', 'e[n]vuelto', 'te[m]blor', 'i[n]ventor'],
+      acento: [['maní', 0], ['difícil', 1], ['murciélago', 2], ['escríbemelo', 3],
+               ['color', 0], ['puerta', 1], ['película', 2], ['llévatelo', 3]],
+      sujetos: [
+        ['La lluvia moja el patio de la escuela.', 2],
+        ['Mi tía Rosa vende frutas en el mercado.', 3],
+        ['Los pájaros construyen su nido en el árbol.', 2],
+        ['El perezoso duerme en las ramas.', 2],
+      ],
+      textos: [
+        ['Los perezosos son mamíferos que viven en los bosques de Costa Rica. Pasan la mayor parte del tiempo colgados de los árboles y bajan al suelo solo una vez por semana. Se alimentan de hojas.', 2],
+        ['Ayer, durante el recreo, Mateo se cayó y se lastimó la rodilla. Sus compañeros lo ayudaron a levantarse y lo llevaron donde la maestra. Ella le puso una curita y, al rato, Mateo ya estaba jugando otra vez.', 1],
+        ['Mi mochila es azul con rayas rojas. Tiene dos bolsillos grandes, un llavero en forma de estrella y unas tiras acolchadas que se sienten suaves en la espalda.', 0],
+      ],
+      partes: [
+        ['¿Qué parte del texto es la parte central, donde se desarrollan las ideas o los hechos?', 1],
+        ['¿Qué parte del texto es la primera, donde se presenta el tema?', 0],
+        ['¿Qué parte del texto resume las ideas principales y da el cierre?', 2],
+      ],
+    },
+  ];
+
+  const LETRAS_VERSION  = ['A', 'B', 'C', 'D', 'E'];
+  const CLASES_VERSION  = ['va', 'vb', 'vc', 'vd', 've'];
+  const TIPOS_ACENTO    = ['Aguda', 'Grave', 'Esdrújula', 'Sobresdrújula'];
+  const TIPOS_TEXTO     = ['Descriptivo', 'Narrativo', 'Informativo'];
+  const PARTES_TEXTO    = ['Introducción', 'Desarrollo', 'Conclusión'];
+
+  let versionActual = -1;
+  let preguntas     = [];
+  let totalPosibles = 0;
+  let indiceActual  = 0;
+  let aciertos      = 0;
+  let respondida    = false;
+  let seleccion     = {};   // cuadrícula: índice de palabra → opción elegida
+  let corteElegido  = -1;   // sujeto/predicado: índice elegido
+
+  /* Convierte una versión en la lista de preguntas a mostrar */
+  function construirPreguntas(v) {
+    const lista = [];
+
+    lista.push({ sec: '✏️ Uso de c, s y z', tipo: 'grid',
+      pregunta: 'Completa cada palabra con c, s o z',
+      opciones: ['c', 's', 'z'], items: v.csz.map(s => parsearHueco(s, ['c', 's', 'z'])) });
+
+    lista.push({ sec: '✏️ m antes de b · n antes de v', tipo: 'grid',
+      pregunta: 'Completa cada palabra con m o n',
+      opciones: ['m', 'n'], items: v.mn.map(s => parsearHueco(s, ['m', 'n'])) });
+
+    lista.push({ sec: '🔤 Agudas, graves, esdrújulas y sobresdrújulas', tipo: 'grid', ancha: true,
+      pregunta: 'Clasifica cada palabra según la sílaba que suena más fuerte',
+      opciones: TIPOS_ACENTO,
+      items: v.acento.map(([palabra, correcta]) => ({ palabra, correcta })) });
+
+    v.sujetos.forEach(([oracion, corte]) => lista.push({
+      sec: '🧩 Sujeto y predicado', tipo: 'sujeto',
+      pregunta: 'Toca la primera palabra del PREDICADO para separar la oración',
+      palabras: oracion.split(' '), corte }));
+
+    shuffle(v.textos).forEach(([texto, correcta]) => lista.push({
+      sec: '📄 Tipos de texto', tipo: 'opciones',
+      pregunta: 'Lee el texto. ¿Qué tipo de texto es?',
+      texto, opciones: TIPOS_TEXTO, correcta }));
+
+    shuffle(v.partes).forEach(([pregunta, correcta]) => lista.push({
+      sec: '📑 Partes del texto', tipo: 'opciones',
+      pregunta, opciones: PARTES_TEXTO, correcta }));
+
+    return lista;
+  }
+
+  /* 'lápi[z]' → { antes:'lápi', letra:'z', despues:'', correcta:2 } */
+  function parsearHueco(s, opciones) {
+    const m = s.match(/^(.*)\[(.+)\](.*)$/);
+    return { antes: m[1], letra: m[2], despues: m[3], correcta: opciones.indexOf(m[2]) };
+  }
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function puntosDe(q) {
+    return q.tipo === 'grid' ? q.items.length : 1;
+  }
+
+  /* ============================================================ */
+
+  function iniciarVersion(v) {
+    versionActual = v;
+    preguntas     = construirPreguntas(VERSIONES[v]);
+    totalPosibles = preguntas.reduce((s, q) => s + puntosDe(q), 0);
+    indiceActual  = 0;
+    aciertos      = 0;
+
+    document.getElementById('pantalla-inicio').style.display    = 'none';
+    document.getElementById('pantalla-quiz').style.display      = 'flex';
+    document.getElementById('pantalla-resultado').style.display = 'none';
+    window.scrollTo({ top: 0 });
+
+    mostrarPregunta();
+  }
+
+  function actualizarPuntaje() {
+    document.getElementById('puntaje-texto').textContent =
+      `✔ ${aciertos} punto${aciertos !== 1 ? 's' : ''}`;
+  }
+
+  function mostrarPregunta() {
+    respondida   = false;
+    seleccion    = {};
+    corteElegido = -1;
+
+    const q     = preguntas[indiceActual];
+    const total = preguntas.length;
+
+    document.getElementById('contador-texto').textContent = `Pregunta ${indiceActual + 1} de ${total}`;
+    actualizarPuntaje();
+    document.getElementById('barra-fill').style.width = `${(indiceActual / total) * 100}%`;
+
+    const badgeV = document.getElementById('badge-version');
+    badgeV.textContent = `Versión ${LETRAS_VERSION[versionActual]}`;
+    badgeV.className   = `badge ${CLASES_VERSION[versionActual]}`;
+    document.getElementById('badge-seccion').textContent = q.sec;
+    document.getElementById('texto-pregunta').textContent = q.pregunta;
+
+    const contenedor = document.getElementById('contenedor');
+    contenedor.innerHTML = '';
+
+    if (q.tipo === 'grid')          renderGrid(q, contenedor);
+    else if (q.tipo === 'sujeto')   renderSujeto(q, contenedor);
+    else                            renderOpciones(q, contenedor);
+
+    const fb = document.getElementById('feedback');
+    fb.className = 'feedback';
+    fb.textContent = '';
+    document.getElementById('btn-siguiente').style.display = 'none';
+  }
+
+  function mostrarBotonSiguiente() {
+    actualizarPuntaje();
+    const btnSig = document.getElementById('btn-siguiente');
+    btnSig.textContent = indiceActual + 1 < preguntas.length ? 'Siguiente pregunta →' : 'Ver resultados →';
+    btnSig.style.display = 'block';
+  }
+
+  function mostrarFeedback(texto, ok) {
+    const fb = document.getElementById('feedback');
+    fb.textContent = texto;
+    fb.className = ok ? 'feedback ok' : 'feedback mal';
+  }
+
+  /* ── Opción única (tipos y partes del texto) ── */
+  function renderOpciones(q, contenedor) {
+    if (q.texto) {
+      const caja = document.createElement('div');
+      caja.className = 'caja-texto';
+      caja.textContent = q.texto;
+      contenedor.appendChild(caja);
+    }
+    const fila = document.createElement('div');
+    fila.className = 'opciones-fila c3';
+    q.opciones.forEach((texto, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'btn-op';
+      btn.textContent = texto;
+      btn.onclick = () => seleccionarOpcion(q, i);
+      fila.appendChild(btn);
+    });
+    contenedor.appendChild(fila);
+  }
+
+  function seleccionarOpcion(q, idx) {
+    if (respondida) return;
+    respondida = true;
+
+    const botones = document.querySelectorAll('.btn-op');
+    botones.forEach((b, i) => {
+      b.disabled = true;
+      if (i === q.correcta) b.classList.add('correcta');
+    });
+
+    if (idx === q.correcta) {
+      aciertos++;
+      mostrarFeedback('¡Correcto! 🎉', true);
+    } else {
+      botones[idx].classList.add('incorrecta');
+      mostrarFeedback(`¡Incorrecto! La respuesta correcta es: ${q.opciones[q.correcta]}`, false);
+    }
+    mostrarBotonSiguiente();
+  }
+
+  /* ── Cuadrícula: completar con letras o clasificar palabras ── */
+  function renderGrid(q, contenedor) {
+    const grid = document.createElement('div');
+    grid.className = 'cl-grid' + (q.ancha ? ' ancha' : '');
+
+    q.items.forEach((item, i) => {
+      const card = document.createElement('div');
+      card.className = 'cl-card';
+
+      const palabra = document.createElement('div');
+      palabra.className = 'cl-palabra';
+      if (item.palabra) {
+        palabra.textContent = item.palabra;
+      } else {
+        const hueco = document.createElement('span');
+        hueco.className = 'hueco';
+        hueco.id = `hueco-${i}`;
+        hueco.textContent = '_';
+        palabra.append(item.antes, hueco, item.despues);
+      }
+
+      const btns = document.createElement('div');
+      btns.className = `cl-btns n${q.opciones.length}`;
+      q.opciones.forEach((label, oi) => {
+        const btn = document.createElement('button');
+        btn.className = 'cl-btn';
+        btn.id = `cl-btn-${i}-${oi}`;
+        btn.textContent = label;
+        btn.onclick = () => elegirEnGrid(q, i, oi);
+        btns.appendChild(btn);
+      });
+
+      card.append(palabra, btns);
+      grid.appendChild(card);
+    });
+    contenedor.appendChild(grid);
+
+    const comprobar = document.createElement('button');
+    comprobar.className = 'btn-comprobar';
+    comprobar.id = 'btn-comprobar';
+    comprobar.textContent = 'Comprobar respuestas ✅';
+    comprobar.onclick = () => comprobarGrid(q);
+    contenedor.appendChild(comprobar);
+  }
+
+  function elegirEnGrid(q, itemIdx, opIdx) {
+    if (respondida) return;
+    seleccion[itemIdx] = opIdx;
+    q.opciones.forEach((_, oi) =>
+      document.getElementById(`cl-btn-${itemIdx}-${oi}`).classList.toggle('sel', oi === opIdx));
+    const hueco = document.getElementById(`hueco-${itemIdx}`);
+    if (hueco) hueco.textContent = q.opciones[opIdx];
+  }
+
+  function comprobarGrid(q) {
+    if (respondida) return;
+    respondida = true;
+
+    let correctas = 0;
+    q.items.forEach((item, i) => {
+      q.opciones.forEach((_, oi) => {
+        const b = document.getElementById(`cl-btn-${i}-${oi}`);
+        b.disabled = true;
+        b.classList.remove('sel');
+      });
+      document.getElementById(`cl-btn-${i}-${item.correcta}`).classList.add('ok');
+
+      const elegida = seleccion[i];
+      const bien = elegida === item.correcta;
+      if (bien) correctas++;
+      else if (elegida !== undefined) document.getElementById(`cl-btn-${i}-${elegida}`).classList.add('bad');
+
+      // En las palabras para completar, mostrar la letra correcta
+      const hueco = document.getElementById(`hueco-${i}`);
+      if (hueco) {
+        hueco.textContent = item.letra;
+        hueco.classList.add(bien ? 'ok' : 'bad');
+      }
+    });
+
+    aciertos += correctas;
+    const n = q.items.length;
+    if (correctas === n) mostrarFeedback(`✅ ¡Perfecto! Las ${n} están correctas.`, true);
+    else mostrarFeedback(`${correctas} de ${n} correctas — en verde están las respuestas correctas.`,
+                         correctas >= Math.ceil(n / 2));
+
+    document.getElementById('btn-comprobar').style.display = 'none';
+    mostrarBotonSiguiente();
+  }
+
+  /* ── Sujeto y predicado: tocar donde empieza el predicado ── */
+  function renderSujeto(q, contenedor) {
+    const leyenda = document.createElement('div');
+    leyenda.className = 'leyenda';
+    leyenda.innerHTML = '<span class="l-suj">■ Sujeto</span><span class="l-pred">■ Predicado</span>';
+    contenedor.appendChild(leyenda);
+
+    const oracion = document.createElement('div');
+    oracion.className = 'oracion';
+    q.palabras.forEach((p, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'palabra-btn';
+      btn.textContent = p;
+      btn.onclick = () => elegirCorte(i);
+      oracion.appendChild(btn);
+    });
+    contenedor.appendChild(oracion);
+
+    const comprobar = document.createElement('button');
+    comprobar.className = 'btn-comprobar';
+    comprobar.id = 'btn-comprobar';
+    comprobar.textContent = 'Comprobar ✅';
+    comprobar.disabled = true;
+    comprobar.onclick = () => comprobarSujeto(q);
+    contenedor.appendChild(comprobar);
+  }
+
+  function pintarCorte(corte) {
+    document.querySelectorAll('.palabra-btn').forEach((b, i) => {
+      b.classList.toggle('suj', i < corte);
+      b.classList.toggle('pred', i >= corte);
+    });
+  }
+
+  function elegirCorte(i) {
+    if (respondida) return;
+    corteElegido = i;
+    pintarCorte(i);
+    document.getElementById('btn-comprobar').disabled = false;
+  }
+
+  function comprobarSujeto(q) {
+    if (respondida || corteElegido < 0) return;
+    respondida = true;
+
+    const botones = document.querySelectorAll('.palabra-btn');
+    botones.forEach(b => b.disabled = true);
+    document.getElementById('btn-comprobar').style.display = 'none';
+
+    const sujeto    = q.palabras.slice(0, q.corte).join(' ');
+    const predicado = q.palabras.slice(q.corte).join(' ');
+
+    if (corteElegido === q.corte) {
+      aciertos++;
+      mostrarFeedback(`¡Correcto! 🎉  Sujeto: "${sujeto}"  ·  Predicado: "${predicado}"`, true);
+    } else {
+      pintarCorte(q.corte);
+      botones[corteElegido].classList.add('mal');
+      mostrarFeedback(`¡Incorrecto! Sujeto: "${sujeto}"  ·  Predicado: "${predicado}"`, false);
+    }
+    mostrarBotonSiguiente();
+  }
+
+  /* ============================================================ */
+
+  function siguientePregunta() {
+    indiceActual++;
+    if (indiceActual < preguntas.length) {
+      mostrarPregunta();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      mostrarResultado();
+    }
+  }
+
+  function mostrarResultado() {
+    document.getElementById('pantalla-quiz').style.display      = 'none';
+    document.getElementById('pantalla-resultado').style.display = 'flex';
+
+    const pct = Math.round((aciertos / totalPosibles) * 100);
+
+    document.getElementById('nota-num').textContent          = `${aciertos}/${totalPosibles}`;
+    document.getElementById('nota-pct').textContent          = `${pct}%`;
+    document.getElementById('total-correctas').textContent   = aciertos;
+    document.getElementById('total-incorrectas').textContent = totalPosibles - aciertos;
+    document.getElementById('total-total').textContent       = totalPosibles;
+
+    let nivel, titulo, sub;
+    if (pct >= 90) {
+      nivel = 'nivel-excelente'; titulo = '¡Excelente! 🏆';
+      sub = '¡Dominas muy bien los temas de Español!';
+    } else if (pct >= 70) {
+      nivel = 'nivel-bien';      titulo = '¡Muy bien! 👏';
+      sub = 'Tienes un buen dominio del tema. ¡Sigue así!';
+    } else if (pct >= 50) {
+      nivel = 'nivel-regular';   titulo = 'Puedes mejorar 💪';
+      sub = 'Repasa el material y vuelve a intentarlo.';
+    } else {
+      nivel = 'nivel-bajo';      titulo = 'Necesitas repasar 📚';
+      sub = 'Lee el repaso rápido y vuelve a intentarlo.';
+    }
+
+    document.getElementById('circulo-nota').className       = `circulo-nota ${nivel}`;
+    document.getElementById('resultado-titulo').textContent = titulo;
+    document.getElementById('resultado-sub').textContent    = sub;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function reintentar() {
+    iniciarVersion(versionActual);
+  }
+
+  function volverInicio() {
+    document.getElementById('pantalla-inicio').style.display    = 'flex';
+    document.getElementById('pantalla-quiz').style.display      = 'none';
+    document.getElementById('pantalla-resultado').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
