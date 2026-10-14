@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estudios Sociales — II Evaluación · II Semestre</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 40px;
+    }
+
+    .volver {
+      align-self: flex-start;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #713f12;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      transition: opacity 0.2s;
+    }
+    .volver:hover { opacity: 0.7; }
+
+    /* ===== PANTALLA: INICIO ===== */
+    #pantalla-inicio {
+      width: 100%;
+      max-width: 640px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .titulo-prueba { text-align: center; }
+    .titulo-prueba .icono { font-size: 3.5rem; margin-bottom: 10px; }
+    .titulo-prueba h1 {
+      color: #713f12;
+      font-size: 2rem;
+      text-shadow: 1px 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 6px;
+    }
+    .titulo-prueba p { color: #92400e; font-size: 1rem; }
+
+    .instrucciones {
+      background: white;
+      border-radius: 16px;
+      padding: 20px 24px;
+      width: 100%;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    .instrucciones h2 { color: #713f12; font-size: 1.05rem; margin-bottom: 10px; }
+    .instrucciones ul { padding-left: 20px; color: #57534e; font-size: 0.95rem; line-height: 1.8; }
+
+    /* Repaso desplegable */
+    .repaso {
+      background: white;
+      border-radius: 16px;
+      width: 100%;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    .repaso summary {
+      cursor: pointer;
+      padding: 16px 24px;
+      color: #713f12;
+      font-weight: bold;
+      font-size: 1.05rem;
+      list-style: none;
+    }
+    .repaso summary::-webkit-details-marker { display: none; }
+    .repaso summary::after { content: ' ▸'; }
+    .repaso[open] summary::after { content: ' ▾'; }
+    .repaso-contenido {
+      padding: 0 24px 20px;
+      color: #44403c;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+    .repaso-contenido h3 {
+      color: #a16207;
+      font-size: 0.95rem;
+      margin: 12px 0 4px;
+    }
+    .repaso-contenido ul { padding-left: 20px; }
+
+    .selector-version { width: 100%; }
+    .selector-version h2 {
+      color: #713f12;
+      font-size: 1.2rem;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .versiones-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      width: 100%;
+    }
+
+    .btn-version {
+      border: none;
+      border-radius: 20px;
+      padding: 24px 20px;
+      cursor: pointer;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-version:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(0,0,0,0.25); }
+    .btn-version span.letra { font-size: 2.6rem; }
+    .btn-version span.sub { font-size: 0.85rem; font-weight: 600; opacity: 0.9; }
+    .btn-version.ve { grid-column: 1 / -1; }
+
+    .va { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+    .vb { background: linear-gradient(135deg, #22c55e, #15803d); }
+    .vc { background: linear-gradient(135deg, #f97316, #c2410c); }
+    .vd { background: linear-gradient(135deg, #a855f7, #7e22ce); }
+    .ve { background: linear-gradient(135deg, #eab308, #a16207); }
+
+    /* ===== PANTALLA: QUIZ ===== */
+    #pantalla-quiz {
+      display: none;
+      width: 100%;
+      max-width: 680px;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .barra-progreso-wrap {
+      background: rgba(255,255,255,0.5);
+      border-radius: 50px;
+      height: 10px;
+      width: 100%;
+      overflow: hidden;
+    }
+    .barra-progreso-fill {
+      height: 100%;
+      background: #713f12;
+      border-radius: 50px;
+      transition: width 0.4s ease;
+    }
+
+    .info-pregunta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #713f12;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .tarjeta-pregunta {
+      background: white;
+      border-radius: 20px;
+      padding: 24px 22px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+    }
+
+    .badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 50px;
+      color: white;
+    }
+    .badge-seccion { background: #fef9c3; color: #713f12; }
+
+    .texto-pregunta {
+      font-size: 1.12rem;
+      color: #1c1917;
+      line-height: 1.5;
+      font-weight: 600;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    /* Caja de descripción (áreas protegidas) */
+    .caja-texto {
+      background: #fefce8;
+      border-left: 5px solid #eab308;
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 1rem;
+      color: #374151;
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    /* ── Botones de opción ── */
+    .opciones-fila { display: grid; gap: 10px; }
+    .opciones-fila.c2 { grid-template-columns: repeat(2, 1fr); }
+    .opciones-fila.lista { grid-template-columns: 1fr; }
+
+    .btn-op {
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 14px 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: white;
+      color: #374151;
+      text-align: center;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    }
+    .opciones-fila.lista .btn-op { text-align: left; font-weight: 600; padding: 13px 16px; }
+    .btn-op:hover:not(:disabled) { background: #fef9c3; border-color: #eab308; transform: translateY(-2px); }
+    .btn-op.correcta   { background: #dcfce7; border-color: #22c55e; color: #14532d; }
+    .btn-op.incorrecta { background: #fee2e2; border-color: #ef4444; color: #dc2626; }
+    .btn-op:disabled   { cursor: default; transform: none; }
+
+    /* ── Cuadrícula (clasificar varios elementos) ── */
+    .cl-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .cl-card {
+      border: 2px solid #fef3c7;
+      border-radius: 12px;
+      padding: 10px 6px 8px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .cl-palabra {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+
+    .cl-btns { display: grid; gap: 4px; }
+    .cl-btns.n3 { grid-template-columns: repeat(3, 1fr); }
+    .cl-btns.n4 { grid-template-columns: repeat(2, 1fr); }
+
+    .cl-btn {
+      border: none;
+      border-radius: 8px;
+      padding: 7px 2px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: #f3f4f6;
+      color: #6b7280;
+      transition: background 0.12s, color 0.12s;
+    }
+    .cl-btn.sel { background: #fde68a; color: #713f12; }
+    .cl-btn.ok  { background: #dcfce7 !important; color: #14532d !important; }
+    .cl-btn.bad { background: #fee2e2 !important; color: #dc2626 !important; }
+    .cl-btn:disabled { cursor: default; }
+
+    .btn-comprobar {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #eab308, #a16207);
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-comprobar:hover { opacity: 0.88; }
+
+    /* ── Feedback ── */
+    .feedback {
+      display: none;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+    .feedback.ok  { background: #dcfce7; color: #15803d; display: block; }
+    .feedback.mal { background: #fee2e2; color: #b91c1c; display: block; }
+
+    .btn-siguiente {
+      display: none;
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 14px;
+      background: #713f12;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-siguiente:hover { background: #92400e; transform: translateY(-2px); }
+
+    /* ===== PANTALLA: RESULTADO ===== */
+    #pantalla-resultado {
+      display: none;
+      width: 100%;
+      max-width: 540px;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .tarjeta-resultado {
+      background: white;
+      border-radius: 24px;
+      padding: 36px 28px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      width: 100%;
+    }
+
+    .circulo-nota {
+      width: 130px; height: 130px;
+      border-radius: 50%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-weight: 900; color: white;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .circulo-nota .nota-num { font-size: 2.2rem; line-height: 1; }
+    .circulo-nota .nota-pct { font-size: 0.95rem; font-weight: 600; margin-top: 2px; }
+
+    .nivel-excelente { background: linear-gradient(135deg, #22c55e, #15803d); }
+    .nivel-bien      { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+    .nivel-regular   { background: linear-gradient(135deg, #f97316, #c2410c); }
+    .nivel-bajo      { background: linear-gradient(135deg, #ef4444, #991b1b); }
+
+    .resultado-titulo { font-size: 1.5rem; font-weight: 900; color: #292524; margin-bottom: 8px; }
+    .resultado-sub    { font-size: 1rem; color: #57534e; margin-bottom: 20px; }
+
+    .detalle-respuestas { display: flex; justify-content: center; gap: 24px; margin-bottom: 24px; }
+    .detalle-item { text-align: center; }
+    .detalle-num  { font-size: 1.8rem; font-weight: 900; }
+    .verde    { color: #22c55e; }
+    .rojo     { color: #ef4444; }
+    .amarillo { color: #ca8a04; }
+    .detalle-lbl { font-size: 0.82rem; color: #78716c; }
+
+    .botones-resultado { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .btn-resultado {
+      padding: 13px 24px;
+      border-radius: 12px;
+      border: none;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    .btn-resultado:hover { transform: translateY(-2px); opacity: 0.9; }
+    .btn-reintentar   { background: #713f12; color: white; }
+    .btn-otra-version { background: #fef9c3; color: #713f12; border: 2px solid #eab308; }
+
+    @media (max-width: 600px) {
+      body { padding: 16px 10px 40px; }
+      .titulo-prueba h1 { font-size: 1.5rem; }
+      .versiones-grid { gap: 10px; }
+      .btn-version { padding: 18px 14px; }
+      .btn-version span.letra { font-size: 2.2rem; }
+      .tarjeta-pregunta { padding: 18px 14px; }
+      .texto-pregunta { font-size: 1rem; }
+      .caja-texto { font-size: 0.95rem; }
+      .btn-op { font-size: 0.9rem; padding: 12px 6px; }
+      .cl-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .cl-palabra { font-size: 0.92rem; }
+      .cl-btns.n3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="volver" href="../index.html">← Estudios Sociales</a>
+
+  <!-- ======== PANTALLA INICIO ======== -->
+  <div id="pantalla-inicio">
+    <div class="titulo-prueba">
+      <div class="icono">🌳</div>
+      <h1>Estudios Sociales</h1>
+      <p>II Evaluación · II Semestre · 3° Grado</p>
+    </div>
+
+    <div class="instrucciones">
+      <h2>📋 Instrucciones</h2>
+      <ul>
+        <li>Elige una versión de la práctica (A, B, C, D o E).</li>
+        <li>Cada versión tiene ejemplos diferentes de los mismos temas.</li>
+        <li>Temas: <strong>patrimonio</strong> tangible, intangible y natural · <strong>recursos naturales</strong> renovables, irrenovables y perpetuos · agua, suelo, flora y fauna · <strong>áreas protegidas</strong> · parques nacionales por provincia.</li>
+        <li>Al terminar verás tu calificación.</li>
+      </ul>
+    </div>
+
+    <details class="repaso">
+      <summary>📘 Repaso rápido (léelo antes de empezar)</summary>
+      <div class="repaso-contenido">
+        <h3>El patrimonio</h3>
+        <ul>
+          <li>Es el conjunto de bienes y valores que representan la forma de ser de los habitantes. Se preserva porque tiene interés histórico y pasa de generación en generación.</li>
+          <li><strong>Tangible:</strong> lo que podemos ver y tocar: monumentos, edificios antiguos, herramientas, fotografías, obras de arte, vestuarios.</li>
+          <li><strong>Intangible:</strong> lo que no se toca, pero se siente y se vive: idioma, religión, bailes, danzas, leyendas, comidas, creencias, costumbres y tradiciones.</li>
+          <li><strong>Natural:</strong> paisajes, montañas, ríos, volcanes, parques nacionales, flora y fauna.</li>
+          <li><strong>Ojo:</strong> un objeto, como una carreta típica, es tangible; la tradición de pintarlas y el boyeo es intangible.</li>
+        </ul>
+        <h3>Los recursos naturales</h3>
+        <ul>
+          <li>Son los elementos que la naturaleza produce y que usamos para vivir: <strong>agua, suelo, flora y fauna</strong>. Todos juntos forman el <strong>patrimonio natural</strong>.</li>
+          <li><strong>Renovables:</strong> se recuperan de forma natural porque se reproducen (flora y fauna).</li>
+          <li><strong>Irrenovables o no renovables:</strong> existen en cantidades limitadas; si se gastan, no se recuperan (petróleo, metales, minerales, rocas, arena).</li>
+          <li><strong>Perpetuos o inagotables:</strong> existen permanentemente y no se gastan (sol, viento, energía del mar).</li>
+          <li>Nos ayudan a satisfacer necesidades como la <strong>alimentación</strong> y la <strong>vivienda</strong>. Su mal uso causa <strong>deforestación</strong> y <strong>extinción de especies</strong>.</li>
+        </ul>
+        <h3>¿Para qué nos sirven?</h3>
+        <ul>
+          <li><strong>Agua:</strong> beber, bañarnos, lavar, cocinar, refrescarnos, viajar en canoa.</li>
+          <li><strong>Suelo:</strong> capa externa que cubre la tierra; sembrar plantas, ganadería, ladrillos, tejas, adobe y arcilla para tinajas.</li>
+          <li><strong>Flora</strong> (plantas): frutas y hortalizas, madera (roble, teca), plantas medicinales (manzanilla, hierbabuena, eucalipto), flores para adornar y hacer perfumes.</li>
+          <li><strong>Fauna</strong> (animales): leche, carne y huevos, transporte (caballo), lana (oveja), el perro cuida la casa.</li>
+        </ul>
+        <h3>Áreas protegidas</h3>
+        <ul>
+          <li><strong>Parque nacional:</strong> protege la naturaleza y también sirve para pasear, la recreación y el turismo.</li>
+          <li><strong>Reserva biológica:</strong> dedicada a estudiar plantas y animales; casi no se permite la entrada de personas.</li>
+          <li><strong>Refugio de vida silvestre:</strong> protege especies en peligro de extinción.</li>
+          <li><strong>Reserva forestal:</strong> protege los ríos y vigila que no se corten demasiados árboles.</li>
+        </ul>
+        <h3>Parques nacionales y su provincia</h3>
+        <ul>
+          <li><strong>Guanacaste:</strong> Rincón de la Vieja, Santa Rosa, Palo Verde.</li>
+          <li><strong>Alajuela:</strong> Volcán Poás.</li>
+          <li><strong>Cartago:</strong> Volcán Irazú, Monumento Nacional Guayabo.</li>
+          <li><strong>Puntarenas:</strong> Manuel Antonio, Isla del Coco, Corcovado.</li>
+          <li><strong>Limón:</strong> Cahuita, Tortuguero.</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="selector-version">
+      <h2>¿Qué versión vas a hacer?</h2>
+      <div class="versiones-grid">
+        <button class="btn-version va" onclick="iniciarVersion(0)"><span class="letra">A</span><span class="sub">Versión A</span></button>
+        <button class="btn-version vb" onclick="iniciarVersion(1)"><span class="letra">B</span><span class="sub">Versión B</span></button>
+        <button class="btn-version vc" onclick="iniciarVersion(2)"><span class="letra">C</span><span class="sub">Versión C</span></button>
+        <button class="btn-version vd" onclick="iniciarVersion(3)"><span class="letra">D</span><span class="sub">Versión D</span></button>
+        <button class="btn-version ve" onclick="iniciarVersion(4)"><span class="letra">E</span><span class="sub">Versión E</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======== PANTALLA QUIZ ======== -->
+  <div id="pantalla-quiz">
+    <div class="info-pregunta">
+      <span id="contador-texto">Pregunta 1 de 15</span>
+      <span id="puntaje-texto">✔ 0 puntos</span>
+    </div>
+    <div class="barra-progreso-wrap">
+      <div class="barra-progreso-fill" id="barra-fill" style="width:0%"></div>
+    </div>
+
+    <div class="tarjeta-pregunta">
+      <div class="badges">
+        <span class="badge" id="badge-version"></span>
+        <span class="badge badge-seccion" id="badge-seccion"></span>
+      </div>
+      <div class="texto-pregunta" id="texto-pregunta"></div>
+      <div id="contenedor"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+
+    <button class="btn-siguiente" id="btn-siguiente" onclick="siguientePregunta()">
+      Siguiente pregunta →
+    </button>
+  </div>
+
+  <!-- ======== PANTALLA RESULTADO ======== -->
+  <div id="pantalla-resultado">
+    <div class="tarjeta-resultado">
+      <div class="circulo-nota" id="circulo-nota">
+        <span class="nota-num" id="nota-num"></span>
+        <span class="nota-pct" id="nota-pct"></span>
+      </div>
+      <div class="resultado-titulo" id="resultado-titulo"></div>
+      <div class="resultado-sub" id="resultado-sub"></div>
+
+      <div class="detalle-respuestas">
+        <div class="detalle-item">
+          <div class="detalle-num verde" id="total-correctas">0</div>
+          <div class="detalle-lbl">Correctas</div>
+        </div>
+        <div class="detalle-item">
+          <div class="detalle-num rojo" id="total-incorrectas">0</div>
+          <div class="detalle-lbl">Incorrectas</div>
+        </div>
+        <div class="detalle-item">
+          <div class="detalle-num amarillo" id="total-total">0</div>
+          <div class="detalle-lbl">Total</div>
+        </div>
+      </div>
+
+      <div class="botones-resultado">
+        <button class="btn-resultado btn-reintentar" onclick="reintentar()">Repetir esta versión</button>
+        <button class="btn-resultado btn-otra-version" onclick="volverInicio()">Elegir otra versión</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  /* ============================================================
+     BANCO DE EJERCICIOS — una entrada por versión (A–E)
+       conceptos  → [pregunta, respuesta correcta, distractor, distractor, distractor]
+       patrimonio → [ejemplo, tipo]       0 tangible · 1 intangible · 2 natural
+       recursos   → [ejemplo, categoría]  0 renovable · 1 irrenovable · 2 perpetuo
+       usos       → [uso, elemento]       0 agua · 1 suelo · 2 flora · 3 fauna
+       areas      → [descripción, área]   0 parque nacional · 1 reserva biológica
+                                          2 refugio de vida silvestre · 3 reserva forestal
+       parques    → [nombre, provincia]   índice en PROVINCIAS
+  ============================================================ */
+  const VERSIONES = [
+    // ───────────── VERSIÓN A ─────────────
+    {
+      conceptos: [
+        ['¿Qué es el patrimonio cultural y natural?',
+          'El conjunto de bienes y valores que representan la forma de ser de los habitantes',
+          'Solo los edificios nuevos de la ciudad', 'El dinero que ahorra cada familia', 'Los juegos que usamos en el recreo'],
+        ['¿Por qué debemos preservar el patrimonio?',
+          'Porque tiene interés histórico y debe pasar de generación en generación',
+          'Porque se puede vender a otros países', 'Porque así no tenemos que estudiar historia', 'Porque es nuevo y moderno'],
+        ['¿Qué son los recursos naturales?',
+          'Los elementos que la naturaleza produce y que usamos para vivir',
+          'Los objetos que se fabrican en las fábricas', 'Los edificios antiguos de una provincia', 'Las tradiciones y costumbres de un pueblo'],
+        ['¿Cuáles son los elementos de los recursos naturales?',
+          'Agua, suelo, flora y fauna',
+          'Edificios, calles, carros y puentes', 'Bailes, comidas, leyendas e idiomas', 'Plástico, vidrio, papel y cartón'],
+      ],
+      patrimonio: [['Teatro Nacional', 0], ['Mascaradas', 1], ['Volcán Arenal', 2], ['Una carreta típica antigua', 0],
+                   ['Leyenda de La Llorona', 1], ['Isla del Coco', 2], ['Fotografías antiguas', 0], ['Baile del Punto Guanacasteco', 1]],
+      recursos:   [['Los árboles', 0], ['Las ranitas', 0], ['Los monos', 0], ['El petróleo', 1],
+                   ['Los metales', 1], ['La arena', 1], ['El sol', 2], ['El viento', 2]],
+      usos: [['Beber y bañarnos', 0], ['Sembrar las plantas', 1], ['Hacer muebles de roble y teca', 2],
+             ['Obtener leche y carne de la vaca', 3], ['Lavar la ropa y cocinar', 0], ['Hacer ladrillos, tejas y adobe', 1]],
+      areas: [
+        ['Lugar para cuidar la naturaleza donde las personas también pueden pasear y divertirse.', 0],
+        ['Zona dedicada a estudiar plantas y animales, donde casi no se permite la entrada de personas.', 1],
+        ['Sitio creado para proteger animales y plantas en peligro de extinción.', 2],
+        ['Área donde se controla la explotación maderera y se protegen las cuencas hidrográficas.', 3],
+      ],
+      parques: [['Parque Nacional Rincón de la Vieja', 4], ['Parque Nacional Cahuita', 6],
+                ['Parque Nacional Manuel Antonio', 5], ['Parque Nacional Volcán Poás', 1]],
+    },
+    // ───────────── VERSIÓN B ─────────────
+    {
+      conceptos: [
+        ['¿Qué tipo de patrimonio es lo que podemos ver y tocar, como los edificios antiguos?',
+          'Patrimonio tangible', 'Patrimonio intangible', 'Patrimonio natural', 'Recurso perpetuo'],
+        ['¿Qué son los recursos renovables?',
+          'Los que se pueden recuperar en forma natural porque se reproducen',
+          'Los que se acaban y no se pueden volver a obtener', 'Los que existen permanentemente y nunca se gastan', 'Los que fabrican las personas en las fábricas'],
+        ['¿Cómo se llama el tesoro que forman todos los recursos naturales juntos?',
+          'Patrimonio natural', 'Patrimonio tangible', 'Patrimonio intangible', 'Reserva forestal'],
+        ['¿Cuáles son dos consecuencias del mal uso de los recursos naturales?',
+          'La deforestación y la extinción de especies',
+          'La alimentación y la vivienda', 'El sol y el viento', 'Los parques nacionales y las reservas biológicas'],
+      ],
+      patrimonio: [['Casona de Santa Rosa', 0], ['Receta del gallo pinto', 1], ['Volcán Poás', 2], ['Iglesia de Orosi', 0],
+                   ['Idioma bribri', 1], ['Playas de Manuel Antonio', 2], ['Herramientas antiguas', 0], ['La Romería', 1]],
+      recursos:   [['Las flores', 0], ['Las vacas', 0], ['Los peces', 0], ['Las rocas', 1],
+                   ['El oro', 1], ['Los minerales', 1], ['La energía solar', 2], ['La energía del mar', 2]],
+      usos: [['Viajar en canoa por el río', 0], ['Hacer tinajas de arcilla', 1], ['Curarnos con té de manzanilla', 2],
+             ['Usar el caballo como transporte', 3], ['Obtener huevos de gallina', 3], ['Comer naranjas y mangos', 2]],
+      areas: [
+        ['Área donde se protegen los ríos y se vigila que no se corten demasiados árboles.', 3],
+        ['Lugar de protección de la naturaleza que también sirve para la recreación y el turismo.', 0],
+        ['Zona destinada al estudio de las especies, donde se controla la entrada del ser humano.', 1],
+        ['Sitio muy seguro creado para proteger especies en peligro de desaparecer.', 2],
+      ],
+      parques: [['Parque Nacional Santa Rosa', 4], ['Parque Nacional Tortuguero', 6],
+                ['Parque Nacional Isla del Coco', 5], ['Parque Nacional Volcán Irazú', 2]],
+    },
+    // ───────────── VERSIÓN C ─────────────
+    {
+      conceptos: [
+        ['¿Qué tipo de patrimonio son el idioma, los bailes, las leyendas y las comidas?',
+          'Patrimonio intangible', 'Patrimonio tangible', 'Patrimonio natural', 'Recurso irrenovable'],
+        ['¿Qué son los recursos irrenovables o no renovables?',
+          'Los que existen en cantidades limitadas y, una vez usados, no se pueden volver a obtener',
+          'Los que se reproducen de forma natural', 'Los que existen permanentemente y no se gastan', 'Los que solo se encuentran en los museos'],
+        ['¿Qué forman todos los animales de una región?',
+          'La fauna', 'La flora', 'El suelo', 'El patrimonio tangible'],
+        ['¿Cuáles son dos necesidades que satisfacemos gracias a los recursos naturales?',
+          'La alimentación y la vivienda',
+          'La deforestación y la contaminación', 'La extinción de especies y la basura', 'Los videojuegos y la televisión'],
+      ],
+      patrimonio: [['Museo Nacional', 0], ['Leyenda del Cadejos', 1], ['Cerro Chirripó', 2], ['Ruinas de Cartago', 0],
+                   ['Bombas y retahílas guanacastecas', 1], ['Río Celeste', 2], ['El Fortín de Heredia', 0], ['Carnavales de Limón', 1]],
+      recursos:   [['Las aves', 0], ['Los pinos', 0], ['Los insectos', 0], ['El hierro', 1],
+                   ['El petróleo', 1], ['Las rocas', 1], ['La luz del sol', 2], ['El viento', 2]],
+      usos: [['Tomar agua para hidratarnos', 0], ['Desarrollar la ganadería', 1], ['Adornar la casa con rosas y violetas', 2],
+             ['Obtener lana de la oveja', 3], ['Limpiar la casa', 0], ['Dar nutrientes para que crezcan las plantas', 1]],
+      areas: [
+        ['Sitio muy seguro donde se estudian y protegen especies en vías de extinción.', 2],
+        ['Área donde se controla la explotación maderera y se protegen las cuencas hidrográficas.', 3],
+        ['Espacio para proteger la naturaleza que también se usa para la recreación y el turismo.', 0],
+        ['Zona para estudiar plantas y animales donde casi no se permite la entrada de personas.', 1],
+      ],
+      parques: [['Parque Nacional Rincón de la Vieja', 4], ['Parque Nacional Corcovado', 5],
+                ['Parque Nacional Cahuita', 6], ['Monumento Nacional Guayabo', 2]],
+    },
+    // ───────────── VERSIÓN D ─────────────
+    {
+      conceptos: [
+        ['¿Qué tipo de patrimonio son los paisajes, las montañas, los ríos y los parques nacionales?',
+          'Patrimonio natural', 'Patrimonio tangible', 'Patrimonio intangible', 'Recurso irrenovable'],
+        ['¿Qué son los recursos perpetuos o inagotables?',
+          'Los que existen permanentemente y no se gastan',
+          'Los que se acaban cuando se usan', 'Los que se reproducen como las plantas', 'Los que se guardan en los museos'],
+        ['¿Qué es el suelo?',
+          'La capa externa que cubre la tierra, donde se siembran las plantas',
+          'El conjunto de todos los animales de una región', 'El líquido que bebemos todos los días', 'Un edificio antiguo de la provincia'],
+        ['¿Cuál es la función de los parques nacionales?',
+          'Proteger y conservar el ambiente; además son espacios de recreación y turismo',
+          'Construir casas y edificios nuevos', 'Cortar árboles para vender la madera', 'Guardar fotografías y herramientas antiguas'],
+      ],
+      patrimonio: [['Cuadro "La Quema del Mesón"', 0], ['Danzas tradicionales', 1], ['Parque Nacional Tortuguero', 2], ['Basílica de los Ángeles', 0],
+                   ['Creencias religiosas', 1], ['El quetzal y la ranita de ojos rojos', 2], ['Vestuarios típicos antiguos', 0], ['Fiestas y costumbres del pueblo', 1]],
+      recursos:   [['Las orquídeas', 0], ['Los perezosos', 0], ['Las gallinas', 0], ['Los metales', 1],
+                   ['La arena', 1], ['El petróleo', 1], ['La energía del viento', 2], ['La energía de las olas del mar', 2]],
+      usos: [['Refrescarnos en un río', 0], ['Construir casas de adobe', 1], ['Preparar perfumes con flores', 2],
+             ['El perro cuida la casa', 3], ['Las aves y mariposas nos alegran', 3], ['Hacer objetos de cerámica con arcilla', 1]],
+      areas: [
+        ['Zona dedicada únicamente a estudiar plantas y animales; casi no entran personas.', 1],
+        ['Lugar creado para proteger animales y plantas en peligro de desaparecer.', 2],
+        ['Área donde se cuida que no se corten demasiados árboles y se protegen los ríos.', 3],
+        ['Lugar para cuidar la naturaleza donde las personas pueden pasear, divertirse y hacer turismo.', 0],
+      ],
+      parques: [['Parque Nacional Manuel Antonio', 5], ['Parque Nacional Volcán Poás', 1],
+                ['Parque Nacional Palo Verde', 4], ['Parque Nacional Tortuguero', 6]],
+    },
+    // ───────────── VERSIÓN E ─────────────
+    {
+      conceptos: [
+        ['¿Qué tipo de patrimonio son la carreta típica y las fotografías antiguas?',
+          'Patrimonio tangible', 'Patrimonio intangible', 'Patrimonio natural', 'Recurso perpetuo'],
+        ['¿A qué categoría de recursos pertenecen la flora y la fauna?',
+          'Recursos renovables', 'Recursos irrenovables', 'Recursos perpetuos', 'Patrimonio tangible'],
+        ['¿Qué es la flora?',
+          'El conjunto de todas las plantas de una región',
+          'El conjunto de todos los animales de una región', 'La capa que cubre la tierra', 'Los ríos, lagos y mares'],
+        ['¿Qué son las áreas protegidas?',
+          'Territorios establecidos por ley donde se resguardan los recursos naturales',
+          'Lugares donde se pueden cortar árboles libremente', 'Edificios antiguos que guardan fotografías', 'Fábricas donde se produce petróleo'],
+      ],
+      patrimonio: [['Esferas de piedra', 0], ['Costumbres y tradiciones', 1], ['Playas de Guanacaste', 2], ['Libros y obras literarias antiguas', 0],
+                   ['Receta del rice and beans', 1], ['Volcán Irazú', 2], ['Monumentos antiguos', 0], ['Idioma y religión', 1]],
+      recursos:   [['Los árboles frutales', 0], ['Las tortugas', 0], ['Los caballos', 0], ['El oro', 1],
+                   ['Las rocas', 1], ['Los minerales', 1], ['La energía solar', 2], ['El viento', 2]],
+      usos: [['Lavar las frutas y verduras', 0], ['Hacer ladrillos y tejas', 1], ['Curarnos con té de hierbabuena', 2],
+             ['Obtener carne y huevos del pato', 3], ['Bañarnos', 0], ['Obtener madera para hacer pisos', 2]],
+      areas: [
+        ['Lugar para pasear y divertirse mientras se cuida la naturaleza.', 0],
+        ['Sitio donde se estudian y protegen especies en vías de extinción.', 2],
+        ['Zona destinada al estudio de las especies, donde se impide y controla la intervención del ser humano.', 1],
+        ['Área donde se protegen los ríos y se vigila que no se corten demasiados árboles.', 3],
+      ],
+      parques: [['Parque Nacional Cahuita', 6], ['Parque Nacional Rincón de la Vieja', 4],
+                ['Parque Nacional Manuel Antonio', 5], ['Parque Nacional Volcán Poás', 1]],
+    },
+  ];
+
+  const LETRAS_VERSION  = ['A', 'B', 'C', 'D', 'E'];
+  const CLASES_VERSION  = ['va', 'vb', 'vc', 'vd', 've'];
+  const TIPOS_PATRIMONIO = ['Tangible', 'Intangible', 'Natural'];
+  const TIPOS_RECURSO    = ['Renovable', 'Irrenovable', 'Perpetuo'];
+  const ELEMENTOS        = ['Agua', 'Suelo', 'Flora', 'Fauna'];
+  const AREAS            = ['Parque nacional', 'Reserva biológica', 'Refugio de vida silvestre', 'Reserva forestal'];
+  const PROVINCIAS       = ['San José', 'Alajuela', 'Cartago', 'Heredia', 'Guanacaste', 'Puntarenas', 'Limón'];
+  // Provincias que no se ofrecen como distractor porque el parque también toca esa provincia
+  const NO_DISTRACTOR    = { 'Parque Nacional Volcán Poás': [3] };
+
+  let versionActual = -1;
+  let preguntas     = [];
+  let totalPosibles = 0;
+  let indiceActual  = 0;
+  let aciertos      = 0;
+  let respondida    = false;
+  let seleccion     = {};   // cuadrícula: índice de elemento → opción elegida
+
+  /* Convierte una versión en la lista de preguntas a mostrar */
+  function construirPreguntas(v) {
+    const lista = [];
+
+    lista.push({ sec: '🏛️ El patrimonio', tipo: 'grid',
+      pregunta: 'Clasifica cada ejemplo según el tipo de patrimonio',
+      opciones: TIPOS_PATRIMONIO,
+      items: shuffle(v.patrimonio).map(([palabra, correcta]) => ({ palabra, correcta })) });
+
+    shuffle(v.conceptos).forEach(([pregunta, ...ops]) => {
+      const opciones = shuffle(ops);
+      lista.push({ sec: '📖 Conceptos', tipo: 'opciones', lista: true,
+        pregunta, opciones, correcta: opciones.indexOf(ops[0]) });
+    });
+
+    lista.push({ sec: '🌿 Tipos de recursos naturales', tipo: 'grid',
+      pregunta: 'Clasifica cada recurso natural en renovable, irrenovable o perpetuo',
+      opciones: TIPOS_RECURSO,
+      items: shuffle(v.recursos).map(([palabra, correcta]) => ({ palabra, correcta })) });
+
+    lista.push({ sec: '💧 Uso de los recursos naturales', tipo: 'grid',
+      pregunta: '¿Qué recurso natural nos permite hacer cada cosa?',
+      opciones: ELEMENTOS,
+      items: shuffle(v.usos).map(([palabra, correcta]) => ({ palabra, correcta })) });
+
+    shuffle(v.areas).forEach(([texto, correcta]) => lista.push({
+      sec: '🦜 Áreas protegidas', tipo: 'opciones',
+      pregunta: 'Lee la descripción. ¿Qué tipo de área protegida es?',
+      texto, opciones: AREAS, correcta }));
+
+    shuffle(v.parques).forEach(([parque, prov]) => {
+      const excluidas = NO_DISTRACTOR[parque] || [];
+      const distractores = shuffle(PROVINCIAS.map((_, i) => i)
+        .filter(i => i !== prov && !excluidas.includes(i))).slice(0, 3);
+      const opciones = shuffle([prov, ...distractores]).map(i => PROVINCIAS[i]);
+      lista.push({ sec: '🗺️ Parques nacionales', tipo: 'opciones',
+        pregunta: `¿En qué provincia se encuentra el ${parque}?`,
+        opciones, correcta: opciones.indexOf(PROVINCIAS[prov]) });
+    });
+
+    return lista;
+  }
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function puntosDe(q) {
+    return q.tipo === 'grid' ? q.items.length : 1;
+  }
+
+  /* ============================================================ */
+
+  function iniciarVersion(v) {
+    versionActual = v;
+    preguntas     = construirPreguntas(VERSIONES[v]);
+    totalPosibles = preguntas.reduce((s, q) => s + puntosDe(q), 0);
+    indiceActual  = 0;
+    aciertos      = 0;
+
+    document.getElementById('pantalla-inicio').style.display    = 'none';
+    document.getElementById('pantalla-quiz').style.display      = 'flex';
+    document.getElementById('pantalla-resultado').style.display = 'none';
+    window.scrollTo({ top: 0 });
+
+    mostrarPregunta();
+  }
+
+  function actualizarPuntaje() {
+    document.getElementById('puntaje-texto').textContent =
+      `✔ ${aciertos} punto${aciertos !== 1 ? 's' : ''}`;
+  }
+
+  function mostrarPregunta() {
+    respondida = false;
+    seleccion  = {};
+
+    const q     = preguntas[indiceActual];
+    const total = preguntas.length;
+
+    document.getElementById('contador-texto').textContent = `Pregunta ${indiceActual + 1} de ${total}`;
+    actualizarPuntaje();
+    document.getElementById('barra-fill').style.width = `${(indiceActual / total) * 100}%`;
+
+    const badgeV = document.getElementById('badge-version');
+    badgeV.textContent = `Versión ${LETRAS_VERSION[versionActual]}`;
+    badgeV.className   = `badge ${CLASES_VERSION[versionActual]}`;
+    document.getElementById('badge-seccion').textContent = q.sec;
+    document.getElementById('texto-pregunta').textContent = q.pregunta;
+
+    const contenedor = document.getElementById('contenedor');
+    contenedor.innerHTML = '';
+
+    if (q.tipo === 'grid') renderGrid(q, contenedor);
+    else                   renderOpciones(q, contenedor);
+
+    const fb = document.getElementById('feedback');
+    fb.className = 'feedback';
+    fb.textContent = '';
+    document.getElementById('btn-siguiente').style.display = 'none';
+  }
+
+  function mostrarBotonSiguiente() {
+    actualizarPuntaje();
+    const btnSig = document.getElementById('btn-siguiente');
+    btnSig.textContent = indiceActual + 1 < preguntas.length ? 'Siguiente pregunta →' : 'Ver resultados →';
+    btnSig.style.display = 'block';
+  }
+
+  function mostrarFeedback(texto, ok) {
+    const fb = document.getElementById('feedback');
+    fb.textContent = texto;
+    fb.className = ok ? 'feedback ok' : 'feedback mal';
+  }
+
+  /* ── Opción única (conceptos, áreas protegidas, parques) ── */
+  function renderOpciones(q, contenedor) {
+    if (q.texto) {
+      const caja = document.createElement('div');
+      caja.className = 'caja-texto';
+      caja.textContent = q.texto;
+      contenedor.appendChild(caja);
+    }
+    const fila = document.createElement('div');
+    fila.className = 'opciones-fila ' + (q.lista ? 'lista' : 'c2');
+    q.opciones.forEach((texto, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'btn-op';
+      btn.textContent = texto;
+      btn.onclick = () => seleccionarOpcion(q, i);
+      fila.appendChild(btn);
+    });
+    contenedor.appendChild(fila);
+  }
+
+  function seleccionarOpcion(q, idx) {
+    if (respondida) return;
+    respondida = true;
+
+    const botones = document.querySelectorAll('.btn-op');
+    botones.forEach((b, i) => {
+      b.disabled = true;
+      if (i === q.correcta) b.classList.add('correcta');
+    });
+
+    if (idx === q.correcta) {
+      aciertos++;
+      mostrarFeedback('¡Correcto! 🎉', true);
+    } else {
+      botones[idx].classList.add('incorrecta');
+      mostrarFeedback(`¡Incorrecto! La respuesta correcta es: ${q.opciones[q.correcta]}`, false);
+    }
+    mostrarBotonSiguiente();
+  }
+
+  /* ── Cuadrícula: clasificar varios elementos ── */
+  function renderGrid(q, contenedor) {
+    const grid = document.createElement('div');
+    grid.className = 'cl-grid';
+
+    q.items.forEach((item, i) => {
+      const card = document.createElement('div');
+      card.className = 'cl-card';
+
+      const palabra = document.createElement('div');
+      palabra.className = 'cl-palabra';
+      palabra.textContent = item.palabra;
+
+      const btns = document.createElement('div');
+      btns.className = `cl-btns n${q.opciones.length}`;
+      q.opciones.forEach((label, oi) => {
+        const btn = document.createElement('button');
+        btn.className = 'cl-btn';
+        btn.id = `cl-btn-${i}-${oi}`;
+        btn.textContent = label;
+        btn.onclick = () => elegirEnGrid(q, i, oi);
+        btns.appendChild(btn);
+      });
+
+      card.append(palabra, btns);
+      grid.appendChild(card);
+    });
+    contenedor.appendChild(grid);
+
+    const comprobar = document.createElement('button');
+    comprobar.className = 'btn-comprobar';
+    comprobar.id = 'btn-comprobar';
+    comprobar.textContent = 'Comprobar respuestas ✅';
+    comprobar.onclick = () => comprobarGrid(q);
+    contenedor.appendChild(comprobar);
+  }
+
+  function elegirEnGrid(q, itemIdx, opIdx) {
+    if (respondida) return;
+    seleccion[itemIdx] = opIdx;
+    q.opciones.forEach((_, oi) =>
+      document.getElementById(`cl-btn-${itemIdx}-${oi}`).classList.toggle('sel', oi === opIdx));
+  }
+
+  function comprobarGrid(q) {
+    if (respondida) return;
+    respondida = true;
+
+    let correctas = 0;
+    q.items.forEach((item, i) => {
+      q.opciones.forEach((_, oi) => {
+        const b = document.getElementById(`cl-btn-${i}-${oi}`);
+        b.disabled = true;
+        b.classList.remove('sel');
+      });
+      document.getElementById(`cl-btn-${i}-${item.correcta}`).classList.add('ok');
+
+      const elegida = seleccion[i];
+      if (elegida === item.correcta) correctas++;
+      else if (elegida !== undefined) document.getElementById(`cl-btn-${i}-${elegida}`).classList.add('bad');
+    });
+
+    aciertos += correctas;
+    const n = q.items.length;
+    if (correctas === n) mostrarFeedback(`✅ ¡Perfecto! Las ${n} están correctas.`, true);
+    else mostrarFeedback(`${correctas} de ${n} correctas — en verde están las respuestas correctas.`,
+                         correctas >= Math.ceil(n / 2));
+
+    document.getElementById('btn-comprobar').style.display = 'none';
+    mostrarBotonSiguiente();
+  }
+
+  /* ============================================================ */
+
+  function siguientePregunta() {
+    indiceActual++;
+    if (indiceActual < preguntas.length) {
+      mostrarPregunta();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      mostrarResultado();
+    }
+  }
+
+  function mostrarResultado() {
+    document.getElementById('pantalla-quiz').style.display      = 'none';
+    document.getElementById('pantalla-resultado').style.display = 'flex';
+
+    const pct = Math.round((aciertos / totalPosibles) * 100);
+
+    document.getElementById('nota-num').textContent          = `${aciertos}/${totalPosibles}`;
+    document.getElementById('nota-pct').textContent          = `${pct}%`;
+    document.getElementById('total-correctas').textContent   = aciertos;
+    document.getElementById('total-incorrectas').textContent = totalPosibles - aciertos;
+    document.getElementById('total-total').textContent       = totalPosibles;
+
+    let nivel, titulo, sub;
+    if (pct >= 90) {
+      nivel = 'nivel-excelente'; titulo = '¡Excelente! 🏆';
+      sub = '¡Eres un gran guardián del patrimonio de Costa Rica!';
+    } else if (pct >= 70) {
+      nivel = 'nivel-bien';      titulo = '¡Muy bien! 👏';
+      sub = 'Tienes un buen dominio del tema. ¡Sigue así!';
+    } else if (pct >= 50) {
+      nivel = 'nivel-regular';   titulo = 'Puedes mejorar 💪';
+      sub = 'Repasa el material y vuelve a intentarlo.';
+    } else {
+      nivel = 'nivel-bajo';      titulo = 'Necesitas repasar 📚';
+      sub = 'Lee el repaso rápido y vuelve a intentarlo.';
+    }
+
+    document.getElementById('circulo-nota').className       = `circulo-nota ${nivel}`;
+    document.getElementById('resultado-titulo').textContent = titulo;
+    document.getElementById('resultado-sub').textContent    = sub;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function reintentar() {
+    iniciarVersion(versionActual);
+  }
+
+  function volverInicio() {
+    document.getElementById('pantalla-inicio').style.display    = 'flex';
+    document.getElementById('pantalla-quiz').style.display      = 'none';
+    document.getElementById('pantalla-resultado').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
